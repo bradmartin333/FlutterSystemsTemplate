@@ -1,14 +1,9 @@
-// Copyright (c) 2019, the Dart project authors.  Please see the AUTHORS file
-// for details. All rights reserved. Use of this source code is governed by a
-// BSD-style license that can be found in the LICENSE file.
-
 import 'dart:ffi';
 import 'dart:io' show Directory, Platform;
 
 import 'package:ffi/ffi.dart';
 import 'package:path/path.dart' as path;
 
-// Example of handling a simple C struct
 final class Coordinate extends Struct {
   @Double()
   external double latitude;
@@ -17,10 +12,8 @@ final class Coordinate extends Struct {
   external double longitude;
 }
 
-// Example of a complex struct (contains a string and a nested struct)
 final class Place extends Struct {
   external Pointer<Utf8> name;
-
   external Coordinate coordinate;
 }
 
@@ -49,11 +42,21 @@ typedef CreatePlaceNative = Place Function(
 typedef CreatePlace = Place Function(
     Pointer<Utf8> name, double latitude, double longitude);
 
+// C function: double distance(struct Coordinate, struct Coordinate)
 typedef DistanceNative = Double Function(Coordinate p1, Coordinate p2);
 typedef Distance = double Function(Coordinate p1, Coordinate p2);
 
-void run() {
-  // Open the dynamic library
+// Dart runtime variables and functions
+DynamicLibrary? dylib;
+bool get initialized => dylib != null;
+
+void checkLoad() {
+  if (!initialized) {
+    loadLib();
+  }
+}
+
+void loadLib() {
   var libraryPath =
       path.join(Directory.current.path, 'structs_library', 'libstructs.so');
   if (Platform.isMacOS) {
@@ -64,42 +67,49 @@ void run() {
     libraryPath = path.join(Directory.current.path, 'structs_library', 'build',
         'Debug', 'structs.dll');
   }
-  final dylib = DynamicLibrary.open(libraryPath);
+  dylib = DynamicLibrary.open(libraryPath);
+}
 
+String helloWorld() {
+  checkLoad();
   final helloWorld =
-      dylib.lookupFunction<HelloWorld, HelloWorld>('hello_world');
-  final message = helloWorld().toDartString();
-  print(message);
+      dylib!.lookupFunction<HelloWorld, HelloWorld>('hello_world');
+  return helloWorld().toDartString();
+}
 
-  final reverse = dylib.lookupFunction<ReverseNative, Reverse>('reverse');
-  final backwards = 'backwards';
-  final backwardsUtf8 = backwards.toNativeUtf8();
-  final reversedMessageUtf8 = reverse(backwardsUtf8, backwards.length);
-  final reversedMessage = reversedMessageUtf8.toDartString();
-  calloc.free(backwardsUtf8);
-  print('$backwards reversed is $reversedMessage');
-
+String reverseString(String s) {
+  checkLoad();
+  final reverse = dylib!.lookupFunction<ReverseNative, Reverse>('reverse');
+  final utf8 = s.toNativeUtf8();
+  final reversedUtf8 = reverse(utf8, utf8.length);
+  final reversedMessage = reversedUtf8.toDartString();
+  calloc.free(utf8);
   final freeString =
-      dylib.lookupFunction<FreeStringNative, FreeString>('free_string');
-  freeString(reversedMessageUtf8);
+      dylib!.lookupFunction<FreeStringNative, FreeString>('free_string');
+  freeString(reversedUtf8);
+  return reversedMessage;
+}
 
-  final createCoordinate =
-      dylib.lookupFunction<CreateCoordinateNative, CreateCoordinate>(
+Coordinate createCoordinate(double latitude, double longitude) {
+  checkLoad();
+  final createCoordinate = dylib!
+      .lookupFunction<CreateCoordinateNative, CreateCoordinate>(
           'create_coordinate');
-  final coordinate = createCoordinate(3.5, 4.6);
-  print(
-      'Coordinate is lat ${coordinate.latitude}, long ${coordinate.longitude}');
+  return createCoordinate(latitude, longitude);
+}
 
-  final myHomeUtf8 = 'My Home'.toNativeUtf8();
+Place createPlace(String name, double latitude, double longitude) {
+  checkLoad();
+  final nameUtf8 = name.toNativeUtf8();
   final createPlace =
-      dylib.lookupFunction<CreatePlaceNative, CreatePlace>('create_place');
-  final place = createPlace(myHomeUtf8, 42.0, 24.0);
-  final name = place.name.toDartString();
-  calloc.free(myHomeUtf8);
-  final coord = place.coordinate;
-  print(
-      'The name of my place is $name at ${coord.latitude}, ${coord.longitude}');
-  final distance = dylib.lookupFunction<DistanceNative, Distance>('distance');
-  final dist = distance(createCoordinate(2.0, 2.0), createCoordinate(5.0, 6.0));
-  print("distance between (2,2) and (5,6) = $dist");
+      dylib!.lookupFunction<CreatePlaceNative, CreatePlace>('create_place');
+  final place = createPlace(nameUtf8, latitude, longitude);
+  calloc.free(nameUtf8);
+  return place;
+}
+
+double getDistance(Coordinate a, Coordinate b) {
+  checkLoad();
+  final distance = dylib!.lookupFunction<DistanceNative, Distance>('distance');
+  return distance(a, b);
 }

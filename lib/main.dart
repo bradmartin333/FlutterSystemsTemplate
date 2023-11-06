@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sys_template/pages/alpha.dart';
 import 'package:flutter_sys_template/pages/beta.dart';
 import 'package:flutter_sys_template/pages/charlie.dart';
-import 'package:flutter_sys_template/utilities/ffi_test.dart';
+import 'package:flutter_sys_template/ffi_utilities/ffi_structs_lib.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'dart:ffi';
 
 void main() => runApp(const SysApp());
 
@@ -69,10 +68,8 @@ class HomePage extends StatelessWidget {
           appBar: AppBar(
             title: const Text("Systems App"),
             leading: IconButton(
-              onPressed: () {
-                run();
-              },
-              icon: const Icon(Icons.question_answer_rounded),
+              onPressed: () {},
+              icon: const Icon(Icons.bluetooth_disabled),
             ),
             actions: [
               IconButton(
@@ -99,18 +96,8 @@ class HomePage extends StatelessWidget {
               charlieWidget(),
             ],
           ),
-          persistentFooterAlignment: AlignmentDirectional.bottomCenter,
-          persistentFooterButtons: [
-            Text("HELLO"),
-            IconButton(onPressed: () {}, icon: Icon(Icons.help)),
-            Text("HELLO"),
-            IconButton(onPressed: () {}, icon: Icon(Icons.help)),
-            FilledButton(
-              onPressed: () {},
-              child: Text("HELP"),
-            )
-          ],
-          bottomSheet: Text("INFO"),
+          bottomSheet:
+              Text(helloWorld() == "Hello World" ? "FFI OK" : "FFI ERROR"),
         );
       }),
     );
