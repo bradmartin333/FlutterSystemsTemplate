@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sys_template/pages/alpha.dart';
 import 'package:flutter_sys_template/pages/beta.dart';
 import 'package:flutter_sys_template/pages/charlie.dart';
+import 'package:flutter_sys_template/utilities/ffi_test.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'dart:ffi';
 
 void main() => runApp(const SysApp());
 
@@ -10,8 +13,23 @@ class SysApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: HomePage(),
+    return MaterialApp(
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.purple,
+          brightness: Brightness.dark,
+        ),
+        textTheme: TextTheme(
+          displayLarge: const TextStyle(
+            fontSize: 72,
+            fontWeight: FontWeight.bold,
+          ),
+          titleLarge: GoogleFonts.oswald(
+            fontSize: 30,
+          ),
+        ),
+      ),
+      home: const HomePage(),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -51,7 +69,9 @@ class HomePage extends StatelessWidget {
           appBar: AppBar(
             title: const Text("Systems App"),
             leading: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                run();
+              },
               icon: const Icon(Icons.question_answer_rounded),
             ),
             actions: [
@@ -68,7 +88,7 @@ class HomePage extends StatelessWidget {
                   borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(50),
                       topRight: Radius.circular(50)),
-                  color: Theme.of(context).secondaryHeaderColor),
+                  color: Theme.of(context).indicatorColor),
               tabs: tabs,
             ),
           ),
@@ -79,6 +99,18 @@ class HomePage extends StatelessWidget {
               charlieWidget(),
             ],
           ),
+          persistentFooterAlignment: AlignmentDirectional.bottomCenter,
+          persistentFooterButtons: [
+            Text("HELLO"),
+            IconButton(onPressed: () {}, icon: Icon(Icons.help)),
+            Text("HELLO"),
+            IconButton(onPressed: () {}, icon: Icon(Icons.help)),
+            FilledButton(
+              onPressed: () {},
+              child: Text("HELP"),
+            )
+          ],
+          bottomSheet: Text("INFO"),
         );
       }),
     );
