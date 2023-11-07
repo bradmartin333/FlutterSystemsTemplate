@@ -1,0 +1,10 @@
+^C:\USERS\BMARTIN\DOCUMENTS\FLUTTER_SYS_TEMPLATE\JSON_LIBRARY\BUILD\CMAKEFILES\AFF8FFEC9BCFADFD71E1DAFCDA967F5A\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/bmartin/Documents/flutter_sys_template/json_library -BC:/Users/bmartin/Documents/flutter_sys_template/json_library/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/bmartin/Documents/flutter_sys_template/json_library/build/json_library.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
