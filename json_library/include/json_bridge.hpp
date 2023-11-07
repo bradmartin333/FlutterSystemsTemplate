@@ -1,1 +1,1 @@
-const char *hello_json();
+char *hello_json();

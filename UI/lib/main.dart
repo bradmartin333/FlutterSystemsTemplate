@@ -3,6 +3,7 @@ import 'package:flutter_sys_template/pages/alpha.dart';
 import 'package:flutter_sys_template/pages/beta.dart';
 import 'package:flutter_sys_template/pages/charlie.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_sys_template/native_json.dart';
 
 void main() => runApp(const SysApp());
 
@@ -95,7 +96,7 @@ class HomePage extends StatelessWidget {
               charlieWidget(),
             ],
           ),
-          bottomSheet: Text(false ? "FFI OK" : "FFI ERROR"),
+          bottomSheet: Text(helloJSON()),
         );
       }),
     );

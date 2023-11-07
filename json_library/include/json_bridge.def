@@ -1,0 +1,3 @@
+LIBRARY   json_library
+EXPORTS
+    hello_json

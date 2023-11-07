@@ -121,6 +121,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ImportLibrary>C:/Users/bmartin/Documents/flutter_sys_template/json_library/build/Debug/json_library.lib</ImportLibrary>
+      <ModuleDefinitionFile>C:/Users/bmartin/Documents/flutter_sys_template/json_library/include/json_bridge.def</ModuleDefinitionFile>
       <ProgramDataBaseFile>C:/Users/bmartin/Documents/flutter_sys_template/json_library/bin/Debug/json_library.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
     </Link>
@@ -164,6 +165,7 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ImportLibrary>C:/Users/bmartin/Documents/flutter_sys_template/json_library/build/Release/json_library.lib</ImportLibrary>
+      <ModuleDefinitionFile>C:/Users/bmartin/Documents/flutter_sys_template/json_library/include/json_bridge.def</ModuleDefinitionFile>
       <ProgramDataBaseFile>C:/Users/bmartin/Documents/flutter_sys_template/json_library/bin/Release/json_library.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
     </Link>
@@ -207,6 +209,7 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ImportLibrary>C:/Users/bmartin/Documents/flutter_sys_template/json_library/build/MinSizeRel/json_library.lib</ImportLibrary>
+      <ModuleDefinitionFile>C:/Users/bmartin/Documents/flutter_sys_template/json_library/include/json_bridge.def</ModuleDefinitionFile>
       <ProgramDataBaseFile>C:/Users/bmartin/Documents/flutter_sys_template/json_library/bin/MinSizeRel/json_library.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
     </Link>
@@ -249,6 +252,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ImportLibrary>C:/Users/bmartin/Documents/flutter_sys_template/json_library/build/RelWithDebInfo/json_library.lib</ImportLibrary>
+      <ModuleDefinitionFile>C:/Users/bmartin/Documents/flutter_sys_template/json_library/include/json_bridge.def</ModuleDefinitionFile>
       <ProgramDataBaseFile>C:/Users/bmartin/Documents/flutter_sys_template/json_library/bin/RelWithDebInfo/json_library.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
     </Link>
@@ -317,6 +321,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="C:\Users\bmartin\Documents\flutter_sys_template\json_library\src\json_bridge.cpp" />
     <ClInclude Include="C:\Users\bmartin\Documents\flutter_sys_template\json_library\include\json.hpp" />
     <ClInclude Include="C:\Users\bmartin\Documents\flutter_sys_template\json_library\include\json_bridge.hpp" />
+    <None Include="C:\Users\bmartin\Documents\flutter_sys_template\json_library\include\json_bridge.def" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="C:\Users\bmartin\Documents\flutter_sys_template\json_library\build\ZERO_CHECK.vcxproj">

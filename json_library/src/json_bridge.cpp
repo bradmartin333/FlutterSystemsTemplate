@@ -6,6 +6,12 @@
 using json = nlohmann::json;
 using std::to_string;
 
+#ifdef __cplusplus
+#define EXTERNC extern "C"
+#else
+#define EXTERNC
+#endif
+
 json get_test_json() 
 {
     return {
@@ -31,22 +37,27 @@ json get_test_json()
 int main()
 {
     // create a JSON object
-    json j = get_test_json();
+    json j = {};
     
     // add new values
-    j["new"]["key"]["value"] = {"another", "list"};
-
-    // count elements
-    auto s = j.size();
-    j["size"] = s;
+    j["valid"] = {true};
 
     // pretty print with indent of 4 spaces
     std::cout << std::setw(4) << j << '\n';
 }
 
-const char *hello_json()
+EXTERNC char *hello_json()
 {
-    auto j_str = get_test_json().dump();
-    const char *c = j_str.c_str();
-    return c;
+    json j = get_test_json();
+    std::string s = j.dump(); 
+    std::cout << s;
+
+    const size_t length = s.length(); 
+    std::cout << length;
+
+    char* char_array = new char[length + 1]; 
+    strcpy_s(char_array, length + 1, s.c_str());
+    std::cout << char_array;
+
+    return char_array;
 }

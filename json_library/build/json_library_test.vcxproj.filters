@@ -17,6 +17,11 @@
     <CustomBuild Include="C:\Users\bmartin\Documents\flutter_sys_template\json_library\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="C:\Users\bmartin\Documents\flutter_sys_template\json_library\include\json_bridge.def">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
     <Filter Include="Header Files">
       <UniqueIdentifier>{9D4B16DB-8E0F-357A-8E52-B4B65549B5FF}</UniqueIdentifier>
     </Filter>

@@ -316,6 +316,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="C:\Users\bmartin\Documents\flutter_sys_template\json_library\src\json_bridge.cpp" />
     <ClInclude Include="C:\Users\bmartin\Documents\flutter_sys_template\json_library\include\json.hpp" />
     <ClInclude Include="C:\Users\bmartin\Documents\flutter_sys_template\json_library\include\json_bridge.hpp" />
+    <None Include="C:\Users\bmartin\Documents\flutter_sys_template\json_library\include\json_bridge.def" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="C:\Users\bmartin\Documents\flutter_sys_template\json_library\build\ZERO_CHECK.vcxproj">
