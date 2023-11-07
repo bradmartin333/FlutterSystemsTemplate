@@ -14,6 +14,9 @@ file( GLOB_RECURSE CPPS "${SOURCE_PATH}/*.cpp" )
 add_library( ${TARGET} SHARED ${CPPS} ${HPPS} ${DEFS} )
 add_executable( "${TARGET}_test" ${CPPS} ${HPPS} ${DEFS} )
 
+target_compile_features( ${TARGET} PUBLIC cxx_std_17 )
+target_compile_features( "${TARGET}_test" PUBLIC cxx_std_17 )
+
 target_include_directories( ${TARGET} PUBLIC ${INCLUDE_PATH} )
 target_include_directories( "${TARGET}_test" PUBLIC ${INCLUDE_PATH} )
 

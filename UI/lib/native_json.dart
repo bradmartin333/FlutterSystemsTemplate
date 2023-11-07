@@ -14,22 +14,10 @@ typedef HelloWorld = Pointer<Utf8> Function();
 
 final DynamicLibrary dylib = () {
   if (Platform.isMacOS || Platform.isIOS) {
-    // Add from here...
-    if (Platform.environment.containsKey('FLUTTER_TEST')) {
-      return DynamicLibrary.open('build/macos/Build/Products/Debug'
-          '/$_libName/$_libName.framework/$_libName');
-    }
-    // ...to here.
-    return DynamicLibrary.open('$_libName.framework/$_libName');
+    throw UnsupportedError('Usupported platform: ${Platform.operatingSystem}');
   }
   if (Platform.isAndroid || Platform.isLinux) {
-    // Add from here...
-    if (Platform.environment.containsKey('FLUTTER_TEST')) {
-      return DynamicLibrary.open(
-          'build/linux/x64/debug/bundle/lib/lib$_libName.so');
-    }
-    // ...to here.
-    return DynamicLibrary.open('lib$_libName.so');
+    return DynamicLibrary.open('libjson.so');
   }
   if (Platform.isWindows) {
     return DynamicLibrary.open(p.join(Directory.current.parent.path,

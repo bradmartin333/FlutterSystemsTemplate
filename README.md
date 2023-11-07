@@ -25,4 +25,12 @@ UI for interacting with larger systems architectures.
 1. Add `C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\MSBuild.exe` to Environment Variables PATH
 1. `winget install -e --id LLVM.LLVM` (For dart ffigen)
 1. Restart any open shells
-1. run `json_library\scripts\build_all.bat`
+1. run `json_library\scripts\win_build.bat`
+
+### ![android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
+1. TODO cmake and such has to be installed
+1. run `json_library\scripts\build.sh`
+1. Why won't android play nice?! Seriously, this NDK stuff is ridiculous!
+    - I know I am not cross-compiling for proper android platforms
+    - *.so is present on device but is missing other *.so files
+    - Really, really annoying - will go back through the terrible dart plugin method I suppose

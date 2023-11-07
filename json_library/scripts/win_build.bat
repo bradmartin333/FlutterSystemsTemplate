@@ -1,7 +1,9 @@
 @ECHO OFF
 
 REM Change directory to the specified path
-cd /D "../build"
+cd /D ".."
+mkdir build
+cd build
 
 REM Run the series of commands
 cmake ../

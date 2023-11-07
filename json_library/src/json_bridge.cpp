@@ -1,7 +1,7 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <iostream>
-#include <iomanip>
 #include <json.hpp>
-#include <stdio.h>
 
 using json = nlohmann::json;
 using std::to_string;
@@ -32,7 +32,7 @@ EXTERNC char *hello_json()
     std::cout << length;
 
     char* char_array = new char[length + 1]; 
-    strcpy_s(char_array, length + 1, s.c_str());
+    strcpy(char_array, s.c_str());
     std::cout << char_array;
 
     return char_array;
