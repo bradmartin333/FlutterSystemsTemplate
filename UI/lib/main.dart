@@ -66,7 +66,7 @@ class HomePage extends StatelessWidget {
         });
         return Scaffold(
           appBar: AppBar(
-            title: const Text("Systems App"),
+            title: const Text('Systems App'),
             leading: IconButton(
               onPressed: () {},
               icon: const Icon(Icons.bluetooth_disabled),
@@ -96,7 +96,7 @@ class HomePage extends StatelessWidget {
               charlieWidget(),
             ],
           ),
-          bottomSheet: Text(helloJSON()),
+          bottomSheet: Text(validJSON() ? 'FFI OK' : 'FFI FAIL'),
         );
       }),
     );

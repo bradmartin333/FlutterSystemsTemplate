@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io' show Directory, Platform;
 import 'package:ffi/ffi.dart';
@@ -38,6 +39,11 @@ final DynamicLibrary dylib = () {
 }();
 
 final NativeJSON _bindings = NativeJSON(dylib);
+
+bool validJSON() {
+  final json = jsonDecode(helloJSON()) as Map<String, dynamic>;
+  return json['valid'] != null && json['valid'];
+}
 
 String helloJSON() {
   return _bindings.hello_json().cast<Utf8>().toDartString();
