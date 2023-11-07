@@ -4,8 +4,10 @@ UI for interacting with larger systems architectures.
 
 ## Features
 
-- C++ FFI
+- C++ JSON FFI
 - just staring out...
+
+## How to reproduce
 
 ### Making the UI
 - Made it's own directory
@@ -15,11 +17,12 @@ UI for interacting with larger systems architectures.
 - Download [`json.hpp`](https://github.com/nlohmann/json/releases) and put in `json_library\include`
 - Create a bridge C++ class (Don't know if that is best practice or not... new to this)
 - Create `json_library\CMakeLists.txt` which will bundle all the files together and make a `*test.exe` and `*library.dll` in a new `json_library\bin\Debug` directory
-    - ![windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
-        - `cd json_library`
-        - `mkdir build`
-        - `cd build`
-        - `cmake ../`
-        - `msbuild .\json_library.vcxproj` for the `*library.dll`
-        - `msbuild .\json_library_test.vcxproj` for the `*test.exe`
-            - Running `*test.exe` should print out a sample JSON
+
+### ![windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
+1. Download and install [CMake](https://cmake.org/download/) and make sure to add to path during installation
+1. Download and install [VS2022 Build Tools](https://aka.ms/vs/17/release/vs_BuildTools.exe)
+1. Open PowerShell and run `where.exe /R C:\ msbuild` and confirm that `C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\MSBuild.exe` is present
+1. Add `C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\MSBuild.exe` to Environment Variables PATH
+1. `winget install -e --id LLVM.LLVM` (For dart ffigen)
+1. Restart any open shells
+1. run `json_library\scripts\build_all.bat`
