@@ -1,9 +1,0 @@
-LIBRARY   structs
-EXPORTS
-    hello_world
-    free_string
-    create_place
-    create_coordinate
-    reverse
-    distance
-
