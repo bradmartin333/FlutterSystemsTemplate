@@ -33,4 +33,5 @@ UI for interacting with larger systems architectures.
 1. Why won't android play nice?! Seriously, this NDK stuff is ridiculous!
     - I know I am not cross-compiling for proper android platforms
     - *.so is present on device but is missing other *.so files
+      ![image](https://github.com/bradmartin333/flutter_sys_template/assets/19335151/5d0d31f4-b3ab-462e-94d3-6123308d8524)
     - Really, really annoying - will go back through the terrible dart plugin method I suppose
