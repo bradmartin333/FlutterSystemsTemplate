@@ -16,7 +16,7 @@ UI for interacting with larger systems architectures.
 ### Implementing C++ JSON Library
 - Download [`json.hpp`](https://github.com/nlohmann/json/releases) and put in `json_library\include`
 - Create a bridge C++ class (Don't know if that is best practice or not... new to this)
-- Create `json_library\CMakeLists.txt` which will bundle all the files together and make a `*test.exe` and `*library.dll` in a new `json_library\bin\Debug` directory
+- Create `json_library\CMakeLists.txt`
 
 ### ![windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
 1. Download and install [CMake](https://cmake.org/download/) and make sure to add to path during installation
@@ -29,6 +29,7 @@ UI for interacting with larger systems architectures.
 
 ### ![android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
 1. TODO cmake and such has to be installed
+1. TODO add files and tweak the AndroidManifest, build.gradle, others...
 1. run `json_library\scripts\build.sh`
 1. Why won't android play nice?! Seriously, this NDK stuff is ridiculous!
     - I know I am not cross-compiling for proper android platforms
