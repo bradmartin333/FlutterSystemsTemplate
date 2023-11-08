@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_sys_template/bloc/app.dart';
+import 'package:flutter_sys_template/app_bloc.dart';
 import 'package:flutter_sys_template/pages/alpha.dart';
 import 'package:flutter_sys_template/pages/beta.dart';
 import 'package:flutter_sys_template/pages/charlie.dart';

@@ -11,6 +11,7 @@ I only just got this working... I have yet to go through these steps again to ma
 ### Making the UI
 - Make it's own directory, `UI`
 - Make a simple navigator using the [DefaultTabController](https://api.flutter.dev/flutter/material/DefaultTabController-class.html)
+- Create a simple BLoC structure
 
 ### Implementing C++ JSON Library (To test with)
 - Download [`json.hpp`](https://github.com/nlohmann/json/releases) and put in `json_library\src`
