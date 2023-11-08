@@ -6,7 +6,6 @@ I only just got this working... I have yet to go through these steps again to ma
 - [ ] FFI callbacks
 - [ ] FFI awaits
 - [ ] UI simulators
-- [ ] Test release mode on multiple devices
 - [ ] Linux -> Linux
 - [ ] Linux -> Android
 

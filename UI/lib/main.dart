@@ -83,8 +83,8 @@ class HomePage extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               indicator: BoxDecoration(
                   borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(50),
-                      topRight: Radius.circular(50)),
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10)),
                   color: Theme.of(context).indicatorColor),
               tabs: tabs,
             ),
