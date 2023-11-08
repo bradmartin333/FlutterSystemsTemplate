@@ -37,3 +37,10 @@ EXTERNC char *hello_json()
 
     return char_array;
 }
+
+EXTERNC int32_t foo(
+                    int32_t bar,
+                    int32_t (*callback)(void*, int32_t)
+                    ) {
+    return callback(nullptr, bar);
+}

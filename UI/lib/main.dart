@@ -68,7 +68,9 @@ class HomePage extends StatelessWidget {
           appBar: AppBar(
             title: const Text('Systems App'),
             leading: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                foo(123);
+              },
               icon: const Icon(Icons.bluetooth_disabled),
             ),
             actions: [

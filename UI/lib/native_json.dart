@@ -34,3 +34,19 @@ bool validJSON() {
 String helloJSON() {
   return _bindings.hello_json().cast<Utf8>().toDartString();
 }
+
+typedef ExampleCallback = Int32 Function(Pointer<Void>, Int32);
+
+const except = -1;
+
+int callback(Pointer<Void> ptr, int i) {
+  print('in callback i=$i');
+  return i + 1;
+}
+
+int foo(int i) {
+  return _bindings.foo(
+    i,
+    Pointer.fromFunction<ExampleCallback>(callback, except),
+  );
+}

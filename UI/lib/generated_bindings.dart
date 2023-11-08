@@ -29,4 +29,160 @@ class NativeJSON {
           'hello_json');
   late final _hello_json =
       _hello_jsonPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+
+  int foo(
+    int bar,
+    ffi.Pointer<
+            ffi.NativeFunction<
+                ffi.Int32 Function(ffi.Pointer<ffi.Void>, ffi.Int32)>>
+        callback,
+  ) {
+    return _foo(
+      bar,
+      callback,
+    );
+  }
+
+  late final _fooPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int32 Function(
+              ffi.Int32,
+              ffi.Pointer<
+                  ffi.NativeFunction<
+                      ffi.Int32 Function(
+                          ffi.Pointer<ffi.Void>, ffi.Int32)>>)>>('foo');
+  late final _foo = _fooPtr.asFunction<
+      int Function(
+          int,
+          ffi.Pointer<
+              ffi.NativeFunction<
+                  ffi.Int32 Function(ffi.Pointer<ffi.Void>, ffi.Int32)>>)>();
 }
+
+const int _VCRT_COMPILER_PREPROCESSOR = 1;
+
+const int _SAL_VERSION = 20;
+
+const int __SAL_H_VERSION = 180000000;
+
+const int _USE_DECLSPECS_FOR_SAL = 0;
+
+const int _USE_ATTRIBUTES_FOR_SAL = 0;
+
+const int _CRT_PACKING = 8;
+
+const int _VCRUNTIME_DISABLED_WARNINGS = 4514;
+
+const int _HAS_EXCEPTIONS = 1;
+
+const int NULL = 0;
+
+const int _HAS_CXX17 = 0;
+
+const int _HAS_CXX20 = 0;
+
+const int _HAS_CXX23 = 0;
+
+const int _HAS_NODISCARD = 1;
+
+const int INT8_MIN = -128;
+
+const int INT16_MIN = -32768;
+
+const int INT32_MIN = -2147483648;
+
+const int INT64_MIN = -9223372036854775808;
+
+const int INT8_MAX = 127;
+
+const int INT16_MAX = 32767;
+
+const int INT32_MAX = 2147483647;
+
+const int INT64_MAX = 9223372036854775807;
+
+const int UINT8_MAX = 255;
+
+const int UINT16_MAX = 65535;
+
+const int UINT32_MAX = 4294967295;
+
+const int UINT64_MAX = -1;
+
+const int INT_LEAST8_MIN = -128;
+
+const int INT_LEAST16_MIN = -32768;
+
+const int INT_LEAST32_MIN = -2147483648;
+
+const int INT_LEAST64_MIN = -9223372036854775808;
+
+const int INT_LEAST8_MAX = 127;
+
+const int INT_LEAST16_MAX = 32767;
+
+const int INT_LEAST32_MAX = 2147483647;
+
+const int INT_LEAST64_MAX = 9223372036854775807;
+
+const int UINT_LEAST8_MAX = 255;
+
+const int UINT_LEAST16_MAX = 65535;
+
+const int UINT_LEAST32_MAX = 4294967295;
+
+const int UINT_LEAST64_MAX = -1;
+
+const int INT_FAST8_MIN = -128;
+
+const int INT_FAST16_MIN = -2147483648;
+
+const int INT_FAST32_MIN = -2147483648;
+
+const int INT_FAST64_MIN = -9223372036854775808;
+
+const int INT_FAST8_MAX = 127;
+
+const int INT_FAST16_MAX = 2147483647;
+
+const int INT_FAST32_MAX = 2147483647;
+
+const int INT_FAST64_MAX = 9223372036854775807;
+
+const int UINT_FAST8_MAX = 255;
+
+const int UINT_FAST16_MAX = 4294967295;
+
+const int UINT_FAST32_MAX = 4294967295;
+
+const int UINT_FAST64_MAX = -1;
+
+const int INTPTR_MIN = -9223372036854775808;
+
+const int INTPTR_MAX = 9223372036854775807;
+
+const int UINTPTR_MAX = -1;
+
+const int INTMAX_MIN = -9223372036854775808;
+
+const int INTMAX_MAX = 9223372036854775807;
+
+const int UINTMAX_MAX = -1;
+
+const int PTRDIFF_MIN = -9223372036854775808;
+
+const int PTRDIFF_MAX = 9223372036854775807;
+
+const int SIZE_MAX = -1;
+
+const int SIG_ATOMIC_MIN = -2147483648;
+
+const int SIG_ATOMIC_MAX = 2147483647;
+
+const int WCHAR_MIN = 0;
+
+const int WCHAR_MAX = 65535;
+
+const int WINT_MIN = 0;
+
+const int WINT_MAX = 65535;
