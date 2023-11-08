@@ -2,7 +2,7 @@
 
 ### Making the UI
 - Made it's own directory, `UI`
-- Make a simple navigator using the [DefaultTabController](https://api.flutter.dev/flutter/material/DefaultTabController-class.html)
+- Made a simple navigator using the [DefaultTabController](https://api.flutter.dev/flutter/material/DefaultTabController-class.html)
 
 ### Implementing C++ JSON Library
 - Download [`json.hpp`](https://github.com/nlohmann/json/releases) and put in `json_library\include`
@@ -38,5 +38,13 @@ These steps assume that you have completed the windows specific steps above and 
             }
         }
     }
+    ```
+1. Update `UI\android\app\src\main\AndroidManifest.xml` with:
+    ```
+    <application
+        ...
+        android:extractNativeLibs="true"
+        tools:replace="android:extractNativeLibs">
+    </application>
     ```
 1. Create `UI\windows\CMakeLists.txt` based off the file in this repo
