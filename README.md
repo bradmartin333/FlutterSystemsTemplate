@@ -1,10 +1,15 @@
-# The most detailed Dart FFI Guide
+# The most detailed systems template
 
-I only just got this working... I have yet to go through these steps again to make sure I didn't forget to type something into here.
+## Features and Examples
+- Dart to C++
+- C++ to Dart
+- State Management
+- Tab Controller
+- Android and Windows (More possible) support
 
 ## TODO
-- [x] Link FFI ReceivePort with state management (BLoC)
-- [ ] UI simulators
+- [ ] More sample UI stuff
+- [ ] Go through all steps on new machine to validate!!!
 - [ ] Linux -> Linux
 - [ ] Linux -> Android
 
