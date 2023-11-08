@@ -1,13 +1,17 @@
+### Possibly the easiest way to build C++ into Flutter for all platforms
+
+I only just got this working... I have yet to go through these steps again to make sure I didn't forget to type something into here. Eventually, I would like to explore all the build pathways that I have the means to test {Windows -> (Windows, Linux, Android), Linux -> (Linux, Android)}.
+
 ## How to reproduce
 
 ### Making the UI
-- Made it's own directory, `UI`
-- Made a simple navigator using the [DefaultTabController](https://api.flutter.dev/flutter/material/DefaultTabController-class.html)
+- Make it's own directory, `UI`
+- Make a simple navigator using the [DefaultTabController](https://api.flutter.dev/flutter/material/DefaultTabController-class.html)
 
 ### Implementing C++ JSON Library
-- Download [`json.hpp`](https://github.com/nlohmann/json/releases) and put in `json_library\include`
+- Download [`json.hpp`](https://github.com/nlohmann/json/releases) and put in `json_library\src`
 - Create a bridge C++ class (Don't know if that is best practice or not... new to this) and `.def` file
-- Create `json_library\CMakeLists.txt`
+- Create `json_library\CMakeLists.txt` and a build/generator script
 
 ### ![windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
 1. Download and install [CMake](https://cmake.org/download/) and make sure to add to path during installation
