@@ -49,8 +49,19 @@ const List<Tab> tabs = <Tab>[
   ),
 ];
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  initState() {
+    super.initState();
+    initPortListener();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +86,9 @@ class HomePage extends StatelessWidget {
             ),
             actions: [
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  print("HELLO!");
+                },
                 icon: const Icon(Icons.question_answer_rounded),
               ),
             ],

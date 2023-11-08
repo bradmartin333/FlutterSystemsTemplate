@@ -1,10 +1,9 @@
-## Possibly the easiest way to build C++ into Flutter
+# The most detailed Dart FFI Guide
 
 I only just got this working... I have yet to go through these steps again to make sure I didn't forget to type something into here.
 
 ## TODO
-- [ ] FFI callbacks
-- [ ] FFI awaits
+- [ ] Link FFI ReceivePort with state management
 - [ ] UI simulators
 - [ ] Linux -> Linux
 - [ ] Linux -> Android
@@ -13,11 +12,21 @@ I only just got this working... I have yet to go through these steps again to ma
 - Make it's own directory, `UI`
 - Make a simple navigator using the [DefaultTabController](https://api.flutter.dev/flutter/material/DefaultTabController-class.html)
 
-### Implementing C++ JSON Library
+### Implementing C++ JSON Library (To test with)
 - Download [`json.hpp`](https://github.com/nlohmann/json/releases) and put in `json_library\src`
 - Create a bridge C++ class (Don't know if that is best practice or not... new to this) and `.def` file
 - Create `json_library\CMakeLists.txt` and a build/generator script
 - Create root level `.gitignore` for `*library/bin` and `*library/build`
+
+### Implementing async FFI with native ports
+- Download the contents of the `json_library\src\dart` directory from the [dart-lang repo](https://github.com/dart-lang/sdk/tree/master/runtime/include)
+- Add `Dart_InitializeApiDL` to the `.def` file
+- Make some test functions in `*bridge.cpp` and include them in `*bridge.hpp` and the `.def` file
+- Add `C` as a a language to `json_library\CMakeLists.txt`
+- Look for `*.c` and `*.h` files in `json_library\CMakeLists.txt`
+- Implement the `ReceivePort` and required funtions in `UI\lib\native_json.dart` as per [this comment](https://github.com/flutter/flutter/issues/63255#issuecomment-671216406)
+- Add `../json_library/src/dart/dart_api_dl.h` to entry points in `UI\config.yaml`
+- Update `UI\android\app\CMakeLists.txt` in the same way
 
 ### ![windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
 1. Download and install [CMake](https://cmake.org/download/) and make sure to add to path during installation

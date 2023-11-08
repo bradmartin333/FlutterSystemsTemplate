@@ -2,3 +2,4 @@ LIBRARY   json_library
 EXPORTS
     hello_json
     foo
+    Dart_InitializeApiDL

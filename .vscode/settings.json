@@ -81,6 +81,7 @@
         "xmemory": "cpp",
         "xtr1common": "cpp",
         "xtree": "cpp",
-        "xutility": "cpp"
+        "xutility": "cpp",
+        "dart_api_dl_impl.h": "c"
     }
 }

@@ -1,14 +1,10 @@
 import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io' show Directory, Platform;
+import 'dart:isolate';
 import 'package:ffi/ffi.dart';
 import 'package:flutter_sys_template/generated_bindings.dart';
-import 'package:path/path.dart' as p; // Add this import
-
-// C function: char *hello_world();
-// There's no need for two typedefs here, as both the
-// C and Dart functions have the same signature
-typedef HelloWorld = Pointer<Utf8> Function();
+import 'package:path/path.dart' as p;
 
 final DynamicLibrary dylib = () {
   if (Platform.isMacOS || Platform.isIOS) {
@@ -26,6 +22,17 @@ final DynamicLibrary dylib = () {
 
 final NativeJSON _bindings = NativeJSON(dylib);
 
+final port = ReceivePort();
+
+void initPortListener() {
+  // Enable async callbacks in dart
+  _bindings.Dart_InitializeApiDL(NativeApi.initializeApiDLData);
+
+  port.listen((data) {
+    print(data);
+  });
+}
+
 bool validJSON() {
   final json = jsonDecode(helloJSON()) as Map<String, dynamic>;
   return json['valid'] != null && json['valid'];
@@ -35,18 +42,7 @@ String helloJSON() {
   return _bindings.hello_json().cast<Utf8>().toDartString();
 }
 
-typedef ExampleCallback = Int32 Function(Pointer<Void>, Int32);
-
-const except = -1;
-
-int callback(Pointer<Void> ptr, int i) {
-  print('in callback i=$i');
-  return i + 1;
-}
-
-int foo(int i) {
-  return _bindings.foo(
-    i,
-    Pointer.fromFunction<ExampleCallback>(callback, except),
-  );
+void foo(int i) {
+  _bindings.foo(i, port.sendPort.nativePort);
+  print("foo done");
 }
