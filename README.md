@@ -1,6 +1,14 @@
-### Possibly the easiest way to build C++ into Flutter
+## Possibly the easiest way to build C++ into Flutter
 
-I only just got this working... I have yet to go through these steps again to make sure I didn't forget to type something into here. Eventually, I would like to explore all the build pathways that I have the means to test {Windows -> (Windows, Linux, Android), Linux -> (Linux, Android)}.
+I only just got this working... I have yet to go through these steps again to make sure I didn't forget to type something into here.
+
+## TODO
+- [ ] FFI callbacks
+- [ ] FFI awaits
+- [ ] UI simulators
+- [ ] Test release mode on multiple devices
+- [ ] Linux -> Linux
+- [ ] Linux -> Android
 
 ### Making the UI
 - Make it's own directory, `UI`
