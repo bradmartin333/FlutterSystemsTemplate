@@ -1,16 +1,7 @@
-# flutter_sys_template
-
-UI for interacting with larger systems architectures.
-
-## Features
-
-- C++ JSON FFI
-- just staring out...
-
 ## How to reproduce
 
 ### Making the UI
-- Made it's own directory
+- Made it's own directory, `UI`
 - Make a simple navigator using the [DefaultTabController](https://api.flutter.dev/flutter/material/DefaultTabController-class.html)
 
 ### Implementing C++ JSON Library
@@ -28,7 +19,9 @@ UI for interacting with larger systems architectures.
 1. Configure Flutter project for ffigen
     - Add `ffigen` to `dev_dependencies` in `UI\pubspec.yaml`
     - Create `UI\config.yaml` based off the file in this repo
+    - Create empty `UI\lib\generated_bindings.dart`
 1. run `json_library\build.bat`
+1. Create wrapper like `UI\lib\native_json.dart`
 
 ### ![android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white) built from ![windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
 These steps assume that you have completed the windows specific steps above and also have a working Android Studio installation / android mobile emulator.

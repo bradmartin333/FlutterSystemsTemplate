@@ -5,8 +5,6 @@ import 'package:ffi/ffi.dart';
 import 'package:flutter_sys_template/generated_bindings.dart';
 import 'package:path/path.dart' as p; // Add this import
 
-const String _libName = 'json_library';
-
 // C function: char *hello_world();
 // There's no need for two typedefs here, as both the
 // C and Dart functions have the same signature
