@@ -1,11 +1,11 @@
 @ECHO OFF
 
-REM Change directory to the specified path
-cd /D ".."
+REM Go into a new build directory
+IF EXIST build RD /S /Q build
 mkdir build
 cd build
 
-REM Run the series of commands
+REM Run the series of build commands
 cmake ../
 msbuild .\json_library.vcxproj
 msbuild .\json_library_test.vcxproj

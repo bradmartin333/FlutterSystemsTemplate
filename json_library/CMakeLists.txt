@@ -5,20 +5,13 @@ set( TARGET ${PROJECT_NAME} )
 set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin )
 
 set( SOURCE_PATH "${PROJECT_SOURCE_DIR}/src" )
-set( INCLUDE_PATH "${PROJECT_SOURCE_DIR}/include" )
 
-file( GLOB_RECURSE HPPS "${INCLUDE_PATH}/*.hpp" )
-file( GLOB_RECURSE DEFS "${INCLUDE_PATH}/*.def" )
+file( GLOB_RECURSE HPPS "${SOURCE_PATH}/*.hpp" )
+file( GLOB_RECURSE DEFS "${SOURCE_PATH}/*.def" )
 file( GLOB_RECURSE CPPS "${SOURCE_PATH}/*.cpp" )
 
 add_library( ${TARGET} SHARED ${CPPS} ${HPPS} ${DEFS} )
 add_executable( "${TARGET}_test" ${CPPS} ${HPPS} ${DEFS} )
-
-target_compile_features( ${TARGET} PUBLIC cxx_std_17 )
-target_compile_features( "${TARGET}_test" PUBLIC cxx_std_17 )
-
-target_include_directories( ${TARGET} PUBLIC ${INCLUDE_PATH} )
-target_include_directories( "${TARGET}_test" PUBLIC ${INCLUDE_PATH} )
 
 install( 
     TARGETS ${TARGET} "${TARGET}_test"

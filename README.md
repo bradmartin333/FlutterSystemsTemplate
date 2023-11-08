@@ -15,7 +15,7 @@ UI for interacting with larger systems architectures.
 
 ### Implementing C++ JSON Library
 - Download [`json.hpp`](https://github.com/nlohmann/json/releases) and put in `json_library\include`
-- Create a bridge C++ class (Don't know if that is best practice or not... new to this)
+- Create a bridge C++ class (Don't know if that is best practice or not... new to this) and `.def` file
 - Create `json_library\CMakeLists.txt`
 
 ### ![windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
@@ -25,14 +25,25 @@ UI for interacting with larger systems architectures.
 1. Add `C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\MSBuild.exe` to Environment Variables PATH
 1. `winget install -e --id LLVM.LLVM` (For dart ffigen)
 1. Restart any open shells
-1. run `json_library\scripts\win_build.bat`
+1. Configure Flutter project for ffigen
+    - Add `ffigen` to `dev_dependencies` in `UI\pubspec.yaml`
+    - Create `UI\config.yaml` based off the file in this repo
+1. run `json_library\build.bat`
 
-### ![android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
-1. TODO cmake and such has to be installed
-1. TODO add files and tweak the AndroidManifest, build.gradle, others...
-1. run `json_library\scripts\build.sh`
-1. Why won't android play nice?! Seriously, this NDK stuff is ridiculous!
-    - I know I am not cross-compiling for proper android platforms
-    - *.so is present on device but is missing other *.so files
-      ![image](https://github.com/bradmartin333/flutter_sys_template/assets/19335151/5d0d31f4-b3ab-462e-94d3-6123308d8524)
-    - Really, really annoying - will go back through the terrible dart plugin method I suppose
+### ![android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white) built from ![windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
+These steps assume that you have completed the windows specific steps above and also have a working Android Studio installation / android mobile emulator.
+1. Setup CMake for Android
+    - `where.exe cmake` in PowerShell should yield `C:\Program Files\CMake\bin\cmake.exe`
+    - Update `UI\android\local.properties` by adding `cmake.dir=C:\\Program Files\\CMake` (Make sure not to have trailing slashes or bin!)
+1. Update `UI\android\build.gradle` by adding:
+    ```
+    android {
+        ...
+        externalNativeBuild {
+            cmake {
+                path = file("CMakeLists.txt")
+            }
+        }
+    }
+    ```
+1. Create `UI\windows\CMakeLists.txt` based off the file in this repo

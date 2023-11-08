@@ -1,6 +1,6 @@
 name: NativeJSON
-description: Bindings to `json_library/include/json_bridge.hpp`.
+description: Bindings to `json_library/src/json_bridge.hpp`.
 output: 'lib/generated_bindings.dart'
 headers:
   entry-points:
-    - '../json_library/include/json_bridge.hpp'
+    - '../json_library/src/json_bridge.hpp'
