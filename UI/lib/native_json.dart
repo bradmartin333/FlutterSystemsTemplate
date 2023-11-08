@@ -3,6 +3,9 @@ import 'dart:ffi';
 import 'dart:io' show Directory, Platform;
 import 'dart:isolate';
 import 'package:ffi/ffi.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_sys_template/bloc/app.dart';
 import 'package:flutter_sys_template/generated_bindings.dart';
 import 'package:path/path.dart' as p;
 
@@ -24,12 +27,12 @@ final NativeJSON _bindings = NativeJSON(dylib);
 
 final port = ReceivePort();
 
-void initPortListener() {
+void initPortListener(BuildContext context) {
   // Enable async callbacks in dart
   _bindings.Dart_InitializeApiDL(NativeApi.initializeApiDLData);
 
   port.listen((data) {
-    print(data);
+    context.read<AppBloc>().add(ChangeStateEvent(data));
   });
 }
 

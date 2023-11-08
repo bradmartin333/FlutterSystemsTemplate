@@ -3,7 +3,7 @@
 I only just got this working... I have yet to go through these steps again to make sure I didn't forget to type something into here.
 
 ## TODO
-- [ ] Link FFI ReceivePort with state management
+- [x] Link FFI ReceivePort with state management (BLoC)
 - [ ] UI simulators
 - [ ] Linux -> Linux
 - [ ] Linux -> Android

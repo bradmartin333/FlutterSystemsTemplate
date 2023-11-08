@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_sys_template/bloc/app.dart';
 import 'package:flutter_sys_template/pages/alpha.dart';
 import 'package:flutter_sys_template/pages/beta.dart';
 import 'package:flutter_sys_template/pages/charlie.dart';
@@ -28,7 +30,10 @@ class SysApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const HomePage(),
+      home: BlocProvider(
+        create: (context) => AppBloc(),
+        child: const HomePage(),
+      ),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -60,60 +65,68 @@ class _HomePageState extends State<HomePage> {
   @override
   initState() {
     super.initState();
-    initPortListener();
+    initPortListener(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: tabs.length,
-      child: Builder(builder: (BuildContext context) {
-        final TabController tabController = DefaultTabController.of(context);
-        tabController.addListener(() {
-          if (!tabController.indexIsChanging) {
-            // Your code goes here.
-            // To get index of current tab use tabController.index
-          }
-        });
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('Systems App'),
-            leading: IconButton(
-              onPressed: () {
-                foo(123);
-              },
-              icon: const Icon(Icons.bluetooth_disabled),
-            ),
-            actions: [
-              IconButton(
-                onPressed: () {
-                  print("HELLO!");
-                },
-                icon: const Icon(Icons.question_answer_rounded),
+    return BlocConsumer<AppBloc, AppState>(
+      listener: (context, state) {
+        print(state);
+      },
+      builder: (context, state) {
+        return DefaultTabController(
+          length: tabs.length,
+          child: Builder(builder: (BuildContext context) {
+            final TabController tabController =
+                DefaultTabController.of(context);
+            tabController.addListener(() {
+              if (!tabController.indexIsChanging) {
+                // Your code goes here.
+                // To get index of current tab use tabController.index
+              }
+            });
+            return Scaffold(
+              appBar: AppBar(
+                title: const Text('Systems App'),
+                leading: IconButton(
+                  onPressed: () {
+                    foo(123);
+                  },
+                  icon: const Icon(Icons.bluetooth_disabled),
+                ),
+                actions: [
+                  IconButton(
+                    onPressed: () {
+                      print("HELLO!");
+                    },
+                    icon: const Icon(Icons.question_answer_rounded),
+                  ),
+                ],
+                bottom: TabBar(
+                  labelColor: Colors.black,
+                  unselectedLabelColor: Colors.white,
+                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  indicator: BoxDecoration(
+                      borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(10)),
+                      color: Theme.of(context).indicatorColor),
+                  tabs: tabs,
+                ),
               ),
-            ],
-            bottom: TabBar(
-              labelColor: Colors.black,
-              unselectedLabelColor: Colors.white,
-              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-              indicator: BoxDecoration(
-                  borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10)),
-                  color: Theme.of(context).indicatorColor),
-              tabs: tabs,
-            ),
-          ),
-          body: TabBarView(
-            children: [
-              alphaWidget(),
-              betaWidget(),
-              charlieWidget(),
-            ],
-          ),
-          bottomSheet: Text(validJSON() ? 'FFI OK' : 'FFI FAIL'),
+              body: TabBarView(
+                children: [
+                  alphaWidget(state),
+                  betaWidget(),
+                  charlieWidget(),
+                ],
+              ),
+              bottomSheet: Text(validJSON() ? 'FFI OK' : 'FFI FAIL'),
+            );
+          }),
         );
-      }),
+      },
     );
   }
 }

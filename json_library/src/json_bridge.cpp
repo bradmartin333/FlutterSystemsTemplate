@@ -43,7 +43,7 @@ EXTERNC char *hello_json()
 EXTERNC void bar(int32_t i, int64_t port)
 {
     int out = i;
-    std::this_thread::sleep_for(std::chrono::seconds(10));
+    std::this_thread::sleep_for(std::chrono::seconds(1));
     Dart_CObject out_object;
     out_object.type = Dart_CObject_kInt32;
     out_object.value.as_int32 = out;
