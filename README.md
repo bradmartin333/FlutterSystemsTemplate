@@ -10,6 +10,7 @@ I only just got this working... I have yet to go through these steps again to ma
 - Download [`json.hpp`](https://github.com/nlohmann/json/releases) and put in `json_library\src`
 - Create a bridge C++ class (Don't know if that is best practice or not... new to this) and `.def` file
 - Create `json_library\CMakeLists.txt` and a build/generator script
+- Create root level `.gitignore` for `*library/bin` and `*library/build`
 
 ### ![windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
 1. Download and install [CMake](https://cmake.org/download/) and make sure to add to path during installation
@@ -27,6 +28,7 @@ I only just got this working... I have yet to go through these steps again to ma
 
 ### ![android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white) built from ![windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
 These steps assume that you have completed the windows specific steps above and also have a working Android Studio installation / android mobile emulator.
+1. Add `**/.cxx` to `UI\android\.gitignore`
 1. Setup CMake for Android
     - `where.exe cmake` in PowerShell should yield `C:\Program Files\CMake\bin\cmake.exe`
     - Update `UI\android\local.properties` by adding `cmake.dir=C:\\Program Files\\CMake` (Make sure not to have trailing slashes or bin!)
@@ -41,12 +43,13 @@ These steps assume that you have completed the windows specific steps above and 
         }
     }
     ```
-1. Update `UI\android\app\src\main\AndroidManifest.xml` with:
+1. (Not sure if necessary) Update beginning of `UI\android\app\src\main\AndroidManifest.xml` with:
     ```
-    <application
-        ...
-        android:extractNativeLibs="true"
-        tools:replace="android:extractNativeLibs">
-    </application>
+    <manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+        <application
+            ...
+            android:extractNativeLibs="true"
+            tools:replace="android:extractNativeLibs">
+        </application>
     ```
 1. Create `UI\windows\CMakeLists.txt` based off the file in this repo
