@@ -72,7 +72,10 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return BlocConsumer<AppBloc, AppState>(
       listener: (context, state) {
-        print(state);
+        PathMap test = stringToPathMap(state.value);
+        for (var element in test.path) {
+          print(element);
+        }
       },
       builder: (context, state) {
         return DefaultTabController(

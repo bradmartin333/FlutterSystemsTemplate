@@ -17,8 +17,9 @@ using std::to_string;
 EXTERNC class Map : public Graph
 {
 private:
-    int m_posX{};
-    int m_posY{};
+    json m_json{};
+    int m_positionX{};
+    int m_positionY{};
     int m_mapX{};
     int m_mapY{};
     std::string m_mapStr{};
@@ -26,14 +27,38 @@ private:
     MicroPather *pather{};
 
 public:
-    Map(int posX = 0, int posY = 0, int mapX = 0, int mapY = 0, std::string mapStr = "")
+    Map(json json)
     {
-        m_posX = posX;
-        m_posY = posY;
-        m_mapX = mapX;
-        m_mapY = mapY;
-        m_mapStr = mapStr;
+        m_json = json;
+        m_positionX = json["position"]["x"];
+        m_positionY = json["position"]["y"];
+        m_mapX = json["map"]["x"];
+        m_mapY = json["map"]["y"];
+        m_mapStr = json["map"]["str"];
         pather = new MicroPather(this, 20);
+        SetPos(json["target"]["x"], json["target"]["y"]);
+    }
+
+    json Path()
+    {
+        m_json["solved"] = false;
+        m_json["path"] = {};
+        int i = 0;
+        for (int j = 0; j < m_mapY; ++j)
+        {
+            unsigned size = path.size();
+            for (unsigned k = 0; k < size; ++k)
+            {
+                int x, y;
+                NodeToXY(path[k], &x, &y);
+                if (y == j)
+                {
+                    m_json["solved"] = true;
+                    m_json["path"][i++] = {{"x", x}, {"y", y}};
+                }
+            }
+        }
+        return m_json;
     }
 
     bool Passable(int nx, int ny)
@@ -54,35 +79,14 @@ public:
         if (Passable(nx, ny))
         {
             float totalCost;
-            result = pather->Solve(XYToNode(m_posX, m_posY), XYToNode(nx, ny), &path, &totalCost);
+            result = pather->Solve(XYToNode(m_positionX, m_positionY), XYToNode(nx, ny), &path, &totalCost);
             if (result == MicroPather::SOLVED)
             {
-                std::cout << "SOLVED\n";
-                m_posX = nx;
-                m_posY = ny;
-            } else {
-                std::cout << "UNSOLVED\n";
+                m_positionX = nx;
+                m_positionY = ny;
             }
-        } else {
-            std::cout << "INVALID MAP\n";
         }
         return result;
-    }
-
-    void Print()
-    {
-        MPVector<void *> stateVec;
-        for (int j = 0; j < m_mapY; ++j)
-        {
-            unsigned size = path.size();
-            for (unsigned k = 0; k < size; ++k)
-            {
-                int x, y;
-                NodeToXY(path[k], &x, &y);
-                if (y == j)
-                    std::cout << x << ' ' << y << '\n';
-            }
-        }
     }
 
     void NodeToXY(void *node, int *x, int *y)

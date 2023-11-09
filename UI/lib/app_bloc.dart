@@ -13,7 +13,7 @@ abstract class AppBlocEvent {
 
 @immutable
 class ChangeStateEvent extends AppBlocEvent {
-  final int value;
+  final String value;
   const ChangeStateEvent(this.value);
 }
 
@@ -22,11 +22,11 @@ class ChangeStateEvent extends AppBlocEvent {
 @immutable
 class AppState extends Equatable {
   final int index;
-  final int value;
+  final String value;
 
   const AppState.empty()
       : index = 0,
-        value = 0;
+        value = "";
 
   const AppState({
     required this.index,
@@ -38,7 +38,7 @@ class AppState extends Equatable {
 
   AppState copyWith({
     int? index,
-    int? value,
+    String? value,
   }) {
     return AppState(
       index: index ?? this.index,

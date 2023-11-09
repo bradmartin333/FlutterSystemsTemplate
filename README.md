@@ -5,6 +5,8 @@
 - C++ to Dart
 - State Management
 - Tab Controller
+- A* Path Generation
+- JSON Compatible
 - Android and Windows (More possible) support
 
 ## TODO

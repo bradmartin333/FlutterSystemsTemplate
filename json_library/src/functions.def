@@ -1,5 +1,5 @@
 LIBRARY   json_library
 EXPORTS
     hello_json
-    foo
+    makeMap
     Dart_InitializeApiDL

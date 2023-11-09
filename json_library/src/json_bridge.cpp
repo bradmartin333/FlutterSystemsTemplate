@@ -18,28 +18,11 @@ using std::to_string;
 #define EXTERNC
 #endif
 
-std::string MAPSTR =
-    "     x      x                x"
-    "     x      xxxxxx    x      x"
-    "xxxx xxxxxxxx      xxxxxxx    "
-    "   x                     xxx x"
-    "        xxxxxx  xxxxx         "
-    "xxxx x  x    x            x   "
-    "   x x  xxxxxx    xxxxxx  xxxx"
-    "   x x            x    x      "
-    "   x xxxxxxxxx  xxx    xxxx   "
-    "xxxx                   x     x";
-
 int main()
 {
     json j = {};
     j["valid"] = true;
-
     std::cout << std::setw(4) << j << '\n';
-
-    Map map = Map(0, 0, 30, 10, MAPSTR);
-    map.SetPos(20, 8);
-    map.Print();
 }
 
 EXTERNC char *hello_json()
@@ -53,19 +36,24 @@ EXTERNC char *hello_json()
     return char_array;
 }
 
-EXTERNC void bar(int32_t i, int64_t port)
+EXTERNC void mapPath(json mapJson, int64_t port)
 {
-    int out = i;
-    std::this_thread::sleep_for(std::chrono::seconds(1));
+    Map map = Map(mapJson);
+    json pathJson = map.Path();
+    std::string s = pathJson.dump();
     Dart_CObject out_object;
-    out_object.type = Dart_CObject_kInt32;
-    out_object.value.as_int32 = out;
+    out_object.type = Dart_CObject_kString;
+    out_object.value.as_string = s.c_str();
     bool ok = Dart_PostCObject_DL(port, &out_object);
 }
 
-EXTERNC int32_t foo(int32_t i, int64_t port)
+EXTERNC int32_t makeMap(char *str, int length, int64_t port)
 {
-    std::thread test(bar, i, port);
-    test.detach();
+    char *json_str = new char[length + 1];
+    memcpy(json_str, str, length);
+    json_str[length] = '\0';
+    json json = json::parse(json_str);
+    std::thread map(mapPath, json, port);
+    map.detach();
     return 0;
 }
