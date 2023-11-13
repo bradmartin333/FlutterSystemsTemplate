@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_sys_template/app_bloc.dart';
 
-List<Point<double>> points = [];
 Point mapSize = Point(-1, -1);
+List<Point<double>> points = [];
 
 void gestureEvent(BuildContext context, dynamic gesture) {
   Point p = Point(gesture.localPosition.dx, gesture.localPosition.dy);
