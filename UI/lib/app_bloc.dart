@@ -69,7 +69,11 @@ class AppBloc extends Bloc<AppBlocEvent, AppState> {
 
   FutureOr<void> _onChangeJsonEvent(
       ChangeJsonEvent event, Emitter<AppState> emit) async {
-    emit(state.copyWith(index: state.index + 1, json: event.value));
+    // Clear cursor so the delete all button actually deletes all
+    emit(state.copyWith(
+        index: state.index + 1,
+        json: event.value,
+        cursor: const Point(-1, -1)));
   }
 
   FutureOr<void> _onChangeCursorEvent(

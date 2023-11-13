@@ -4,7 +4,6 @@ import 'package:flutter_sys_template/app_bloc.dart';
 import 'package:flutter_sys_template/pages/alpha.dart';
 import 'package:flutter_sys_template/pages/beta.dart';
 import 'package:flutter_sys_template/pages/charlie.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_sys_template/native_json.dart';
 
 void main() => runApp(const SysApp());
@@ -19,15 +18,6 @@ class SysApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.purple,
           brightness: Brightness.dark,
-        ),
-        textTheme: TextTheme(
-          displayLarge: const TextStyle(
-            fontSize: 72,
-            fontWeight: FontWeight.bold,
-          ),
-          titleLarge: GoogleFonts.oswald(
-            fontSize: 30,
-          ),
         ),
       ),
       home: BlocProvider(
@@ -73,8 +63,7 @@ class _HomePageState extends State<HomePage> {
     return DefaultTabController(
       length: tabs.length,
       child: Builder(builder: (BuildContext context) {
-        final TabController tabController =
-            DefaultTabController.of(context);
+        final TabController tabController = DefaultTabController.of(context);
         tabController.addListener(() {
           if (!tabController.indexIsChanging) {
             // Your code goes here.
@@ -99,7 +88,7 @@ class _HomePageState extends State<HomePage> {
           body: TabBarView(
             children: [
               alphaWidget(),
-              betaWidget(context),
+              betaWidget(),
               charlieWidget(),
             ],
           ),
