@@ -121,7 +121,7 @@ Widget mapSolver() {
                   mainAxisAlignment: MainAxisAlignment.end,
                   key: const ValueKey<int>(0),
                   children: [
-                    const Text('Delete all black boxes?'),
+                    const Text('Delete all walls?'),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: FilledButton.tonal(
@@ -194,16 +194,16 @@ class MapCanvas extends CustomPainter {
       updateMap();
     }
 
-    final Rect rect = Offset.zero & size;
-    canvas.drawRect(
-      rect,
-      Paint()..color = Colors.white,
-    );
+    // final Rect rect = Offset.zero & size;
+    // canvas.drawRect(
+    //   rect,
+    //   Paint()..color = Colors.white,
+    // );
 
     // Draw the map we are storing here
     for (var point in points) {
       canvas.drawRect(Rect.fromLTWH(point.x, point.y, rectSize, rectSize),
-          Paint()..color = Colors.black);
+          Paint()..color = Colors.white);
     }
 
     // Parse the map json
