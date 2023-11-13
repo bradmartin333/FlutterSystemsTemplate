@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_sys_template/app_bloc.dart';
 import 'package:flutter_sys_template/native_json.dart';
 
+const double buttonPadding = 3;
+
 bool repaint = false;
 DrawingTool tool = DrawingTool.none;
 double rectSize = 25;
@@ -18,7 +20,10 @@ void gestureEvent(BuildContext context, dynamic gesture) {
   Point<double> p = Point(
       (gesture.localPosition.dx / rectSize).floor() * rectSize,
       (gesture.localPosition.dy / rectSize).floor() * rectSize);
-  if (p.x >= 0 && p.y >= 0) {
+  if (p.x >= 0 &&
+      p.y >= 0 &&
+      p.x < mapSize.x * rectSize &&
+      p.y < mapSize.y * rectSize) {
     switch (tool) {
       case DrawingTool.position:
         if (points.contains(p)) {
@@ -77,7 +82,7 @@ void updateMap() {
 Widget makeToolButton(
     DrawingTool thisTool, IconData iconData, Function setState) {
   return Padding(
-    padding: const EdgeInsets.all(8.0),
+    padding: const EdgeInsets.all(buttonPadding),
     child: FilledButton.tonal(
       onPressed: () => setState(() => tool = thisTool),
       child: Icon(
@@ -134,7 +139,7 @@ Widget mapSolver() {
                   children: [
                     const Text('Delete all walls?'),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(buttonPadding),
                       child: FilledButton.tonal(
                         onPressed: () {
                           points.clear();
@@ -148,7 +153,7 @@ Widget mapSolver() {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(buttonPadding),
                       child: FilledButton.tonal(
                         onPressed: () => setState(() => userDelete = false),
                         child: const Icon(
@@ -170,7 +175,7 @@ Widget mapSolver() {
                         DrawingTool.draw, Icons.select_all, setState),
                     makeToolButton(DrawingTool.erase, Icons.deselect, setState),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(buttonPadding),
                       child: Visibility(
                         visible: !userDelete,
                         child: FilledButton.tonal(
@@ -200,16 +205,22 @@ class MapCanvas extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     if (mapSize == const Point(-1, -1)) {
-      mapSize = Point(
-          (size.width / rectSize).floor(), (size.height / rectSize).floor());
+      mapSize = Point((size.width / rectSize).floor(),
+          (size.height / rectSize).floor() - 2);
       updateMap();
     }
 
-    // final Rect rect = Offset.zero & size;
-    // canvas.drawRect(
-    //   rect,
-    //   Paint()..color = Colors.white,
-    // );
+    // Draw infinite walls outside the starting map
+    double bottom = mapSize.y * rectSize;
+    double right = mapSize.x * rectSize;
+    canvas.drawRect(
+      Offset(0, bottom) & Size(size.width, size.height - bottom),
+      Paint()..color = Colors.white,
+    );
+    canvas.drawRect(
+      Offset(right, 0) & Size(size.width - right, size.height),
+      Paint()..color = Colors.white,
+    );
 
     // Draw the map we are storing here
     for (var point in points) {
