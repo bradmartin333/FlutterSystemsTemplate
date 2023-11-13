@@ -77,7 +77,7 @@ Widget makeToolButton(
   );
 }
 
-Widget betaWidget() {
+Widget mapSolver() {
   var userDelete = false;
 
   return StatefulBuilder(

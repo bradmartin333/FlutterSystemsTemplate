@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_sys_template/app_bloc.dart';
 import 'package:flutter_sys_template/pages/alpha.dart';
-import 'package:flutter_sys_template/pages/beta.dart';
-import 'package:flutter_sys_template/pages/charlie.dart';
+import 'package:flutter_sys_template/pages/map_solver.dart';
+import 'package:flutter_sys_template/pages/one.dart';
 import 'package:flutter_sys_template/native_json.dart';
 
 void main() => runApp(const SysApp());
@@ -31,15 +31,15 @@ class SysApp extends StatelessWidget {
 
 const List<Tab> tabs = <Tab>[
   Tab(
+    text: 'Map Solver',
+    icon: Icon(Icons.map),
+  ),
+  Tab(
     text: 'Alpha',
     icon: Icon(Icons.settings_accessibility_rounded),
   ),
   Tab(
-    text: 'Beta',
-    icon: Icon(Icons.roundabout_left_rounded),
-  ),
-  Tab(
-    text: 'Charlie',
+    text: 'One',
     icon: Icon(Icons.hive_rounded),
   ),
 ];
@@ -87,9 +87,9 @@ class _HomePageState extends State<HomePage> {
           ),
           body: TabBarView(
             children: [
-              alphaWidget(),
-              betaWidget(),
-              charlieWidget(),
+              mapSolver(),
+              alpha(),
+              one(),
             ],
           ),
           bottomSheet: Text(validJSON() ? 'FFI OK' : 'FFI FAIL'),

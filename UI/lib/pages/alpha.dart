@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
 
-Widget alphaWidget() {
+Widget alpha() {
   return const Text('alpha');
 }
