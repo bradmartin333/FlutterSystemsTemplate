@@ -72,9 +72,11 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return BlocConsumer<AppBloc, AppState>(
       listener: (context, state) {
-        PathMap test = stringToPathMap(state.value);
-        for (var element in test.path) {
-          print(element);
+        PathMap test = stringToPathMap(state.json);
+        if (test.valid) {
+          for (var element in test.path) {
+            print(element);
+          }
         }
       },
       builder: (context, state) {
@@ -121,7 +123,7 @@ class _HomePageState extends State<HomePage> {
               body: TabBarView(
                 children: [
                   alphaWidget(state),
-                  betaWidget(),
+                  betaWidget(context),
                   charlieWidget(),
                 ],
               ),

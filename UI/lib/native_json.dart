@@ -11,6 +11,7 @@ import 'package:flutter_sys_template/generated_bindings.dart';
 import 'package:path/path.dart' as p;
 
 class PathMap {
+  final bool valid;
   final bool solved;
   final Point position;
   final Point target;
@@ -18,11 +19,12 @@ class PathMap {
   final String mapString;
   final List<Point> path;
 
-  PathMap(this.solved, this.position, this.target, this.mapSize, this.mapString,
-      this.path);
+  PathMap(this.valid, this.solved, this.position, this.target, this.mapSize,
+      this.mapString, this.path);
 
   Map<String, dynamic> toJson() {
     var output = {
+      'valid': valid,
       'solved': solved,
       'position': {'x': position.x, 'y': position.y},
       'target': {'x': target.x, 'y': target.y},
@@ -40,18 +42,27 @@ class PathMap {
 }
 
 PathMap stringToPathMap(String s) {
-  Map<String, dynamic> json = jsonDecode(s);
+  Map<String, dynamic> json;
+  try {
+    json = jsonDecode(s);
+  } catch (e) {
+    Point np = const Point(-1, -1); // Null point
+    return PathMap(false, false, np, np, np, "", []);
+  }
+
   bool solved = json['solved'];
   Point pos = Point(json['position']['x'] as int, json['position']['y'] as int);
   Point target = Point(json['target']['x'] as int, json['target']['y'] as int);
   Point mapSize = Point(json['map']['x'] as int, json['map']['y'] as int);
   String mapString = json['map']['str'];
+
   var points = json['path'];
   List<Point> path = [];
   for (var point in points) {
     path.add(Point(point['x'] as int, point['y'] as int));
   }
-  return PathMap(solved, pos, target, mapSize, mapString, path);
+
+  return PathMap(true, solved, pos, target, mapSize, mapString, path);
 }
 
 final DynamicLibrary dylib = () {
@@ -77,7 +88,7 @@ void initPortListener(BuildContext context) {
   _bindings.Dart_InitializeApiDL(NativeApi.initializeApiDLData);
 
   port.listen((data) {
-    context.read<AppBloc>().add(ChangeStateEvent(data));
+    context.read<AppBloc>().add(ChangeJsonEvent(data));
   });
 }
 
@@ -92,6 +103,7 @@ String helloJSON() {
 
 void foo(int i) {
   PathMap pathmap = PathMap(
+    true,
     false,
     const Point(0, 0),
     const Point(20, 8),
