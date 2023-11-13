@@ -24,22 +24,34 @@ void gestureEvent(BuildContext context, dynamic gesture) {
         if (points.contains(p)) {
           points.remove(p);
         }
-        position = Point((p.x / rectSize).floor(), (p.y / rectSize).floor());
+        Point newPosition =
+            Point((p.x / rectSize).floor(), (p.y / rectSize).floor());
+        if (position != newPosition) {
+          position = newPosition;
+          updateMap();
+        }
         break;
       case DrawingTool.target:
         if (points.contains(p)) {
           points.remove(p);
         }
-        target = Point((p.x / rectSize).floor(), (p.y / rectSize).floor());
+        Point newTarget =
+            Point((p.x / rectSize).floor(), (p.y / rectSize).floor());
+        if (target != newTarget) {
+          target = newTarget;
+          updateMap();
+        }
         break;
       case DrawingTool.draw:
         if (!points.contains(p) && p != position && p != target) {
           points.add(p);
+          updateMap();
         }
         break;
       case DrawingTool.erase:
         if (points.contains(p)) {
           points.remove(p);
+          updateMap();
         }
         break;
       case DrawingTool.none:
@@ -47,7 +59,6 @@ void gestureEvent(BuildContext context, dynamic gesture) {
         break;
     }
   }
-  updateMap();
 }
 
 void updateMap() {

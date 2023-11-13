@@ -10,6 +10,10 @@ import 'package:flutter_sys_template/app_bloc.dart';
 import 'package:flutter_sys_template/generated_bindings.dart';
 import 'package:path/path.dart' as p;
 
+enum FFIState { none, sent, waiting, ok, fail }
+
+FFIState ffiState = FFIState.none;
+
 class PathMap {
   final bool valid;
   final bool solved;
@@ -91,13 +95,28 @@ void initPortListener(BuildContext context) {
   _bindings.Dart_InitializeApiDL(NativeApi.initializeApiDLData);
 
   port.listen((data) {
+    ffiState = FFIState.ok;
     context.read<AppBloc>().add(ChangeJsonEvent(data));
   });
 }
 
-bool validJSON() {
-  final json = jsonDecode(helloJSON()) as Map<String, dynamic>;
-  return json['valid'] != null && json['valid'];
+String jsonStateString() {
+  String output = "FFI ";
+  switch (ffiState) {
+    case FFIState.waiting:
+    case FFIState.ok:
+    case FFIState.fail:
+      output += ffiState.name.toUpperCase();
+    case FFIState.none:
+    default:
+      final json = jsonDecode(helloJSON()) as Map<String, dynamic>;
+      if (json['valid'] != null && json['valid']) {
+        ffiState = FFIState.ok;
+      }
+      output += "N/A";
+      break;
+  }
+  return output;
 }
 
 String helloJSON() {
@@ -119,6 +138,7 @@ void sendMap(
     mapString,
     [],
   );
+  ffiState = FFIState.waiting;
   String pathJsonString = jsonEncode(pathmap.toJson());
   var ptr = pathJsonString.toNativeUtf8().cast<Char>();
   _bindings.makeMap(ptr, pathJsonString.length, port.sendPort.nativePort);

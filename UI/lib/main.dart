@@ -70,29 +70,35 @@ class _HomePageState extends State<HomePage> {
             // To get index of current tab use tabController.index
           }
         });
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('Systems App'),
-            bottom: TabBar(
-              labelColor: Colors.black,
-              unselectedLabelColor: Colors.white,
-              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-              indicator: BoxDecoration(
-                  borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10)),
-                  color: Theme.of(context).indicatorColor),
-              tabs: tabs,
-            ),
-          ),
-          body: TabBarView(
-            children: [
-              mapSolver(),
-              alpha(),
-              one(),
-            ],
-          ),
-          bottomSheet: Text(validJSON() ? 'FFI OK' : 'FFI FAIL'),
+        return BlocConsumer<AppBloc, AppState>(
+          listener: (context, state) {},
+          builder: (context, state) {
+            return Scaffold(
+              appBar: AppBar(
+                title: const Text('Systems App'),
+                bottom: TabBar(
+                  labelColor: Colors.black,
+                  unselectedLabelColor: Colors.white,
+                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  indicator: BoxDecoration(
+                      borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(10)),
+                      color: Theme.of(context).indicatorColor),
+                  tabs: tabs,
+                ),
+              ),
+              body: TabBarView(
+                physics: const NeverScrollableScrollPhysics(),
+                children: [
+                  mapSolver(),
+                  alpha(),
+                  one(),
+                ],
+              ),
+              bottomSheet: Text(jsonStateString()),
+            );
+          },
         );
       }),
     );
