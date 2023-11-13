@@ -105,14 +105,16 @@ String helloJSON() {
 }
 
 void sendMap(
+  Point position,
+  Point target,
   Point mapSize,
   String mapString,
 ) {
   PathMap pathmap = PathMap(
     true,
     false,
-    const Point(0, 0),
-    const Point(20, 8),
+    position,
+    target,
     mapSize,
     mapString,
     [],

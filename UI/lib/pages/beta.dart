@@ -4,26 +4,61 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_sys_template/app_bloc.dart';
 import 'package:flutter_sys_template/native_json.dart';
 
+bool repaint = false;
 DrawingTool tool = DrawingTool.none;
 double rectSize = 25;
 Point mapSize = const Point(-1, -1);
-List<Point<double>> points = [];
+Point position = const Point(0, 0);
+Point target = const Point(10, 10);
+List<Point<double>> points = []; // Raw local positions of user gestures
 
 enum DrawingTool { none, position, target, draw, erase }
 
 void gestureEvent(BuildContext context, dynamic gesture) {
-  Point p = Point(gesture.localPosition.dx, gesture.localPosition.dy);
-  context.read<AppBloc>().add(ChangeCursorEvent(p));
+  Point<double> p = Point(
+      (gesture.localPosition.dx / rectSize).floor() * rectSize,
+      (gesture.localPosition.dy / rectSize).floor() * rectSize);
+  if (p.x >= 0 && p.y >= 0) {
+    switch (tool) {
+      case DrawingTool.position:
+        if (points.contains(p)) {
+          points.remove(p);
+        }
+        position = Point((p.x / rectSize).floor(), (p.y / rectSize).floor());
+        break;
+      case DrawingTool.target:
+        if (points.contains(p)) {
+          points.remove(p);
+        }
+        target = Point((p.x / rectSize).floor(), (p.y / rectSize).floor());
+        break;
+      case DrawingTool.draw:
+        if (!points.contains(p) && p != position && p != target) {
+          points.add(p);
+        }
+        break;
+      case DrawingTool.erase:
+        if (points.contains(p)) {
+          points.remove(p);
+        }
+        break;
+      case DrawingTool.none:
+      default:
+        break;
+    }
+  }
   updateMap();
 }
 
 void updateMap() {
   sendMap(
+      position,
+      target,
       mapSize,
       String.fromCharCodes(Iterable.generate(
           (mapSize.x * mapSize.y).toInt(),
-          (i) => points.contains(Point((i % mapSize.x + 1) * rectSize,
-                  (i / mapSize.x + 1).floor() * rectSize))
+          (i) => points.contains(Point((i % mapSize.x) * rectSize,
+                  (i / mapSize.x).floor() * rectSize))
               ? 120
               : 32)));
 }
@@ -54,7 +89,7 @@ Widget betaWidget() {
           child: GestureDetector(
             child: BlocConsumer<AppBloc, AppState>(
               listener: (context, state) {
-                //print(state.cursor);
+                repaint = true;
               },
               builder: (context, state) {
                 return CustomPaint(
@@ -86,7 +121,7 @@ Widget betaWidget() {
                   mainAxisAlignment: MainAxisAlignment.end,
                   key: const ValueKey<int>(0),
                   children: [
-                    const Text('Delete All?'),
+                    const Text('Delete all black boxes?'),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: FilledButton.tonal(
@@ -156,6 +191,7 @@ class MapCanvas extends CustomPainter {
     if (mapSize == const Point(-1, -1)) {
       mapSize = Point(
           (size.width / rectSize).floor(), (size.height / rectSize).floor());
+      updateMap();
     }
 
     final Rect rect = Offset.zero & size;
@@ -164,33 +200,38 @@ class MapCanvas extends CustomPainter {
       Paint()..color = Colors.white,
     );
 
-    // Draw the user point
-    double px = (cursor.x / rectSize).floor() * rectSize;
-    double py = (cursor.y / rectSize).floor() * rectSize;
-    Point<double> newPoint = Point(px, py);
-    if (!points.contains(newPoint)) {
-      points.add(newPoint);
-    }
-    for (var element in points) {
-      canvas.drawRect(Rect.fromLTWH(element.x, element.y, rectSize, rectSize),
+    // Draw the map we are storing here
+    for (var point in points) {
+      canvas.drawRect(Rect.fromLTWH(point.x, point.y, rectSize, rectSize),
           Paint()..color = Colors.black);
     }
 
     // Parse the map json
-    PathMap test = stringToPathMap(json);
-    if (test.valid && test.solved) {
-      for (var element in test.path) {
-        canvas.drawRect(
-            Rect.fromLTWH(
-                element.x * rectSize, element.y * rectSize, rectSize, rectSize),
-            Paint()..color = Colors.blue);
+    PathMap map = stringToPathMap(json);
+    if (map.valid) {
+      if (map.solved) {
+        for (var point in map.path) {
+          canvas.drawRect(
+              Rect.fromLTWH(
+                  point.x * rectSize, point.y * rectSize, rectSize, rectSize),
+              Paint()..color = Colors.blue);
+        }
       }
+      canvas.drawRect(
+          Rect.fromLTWH(map.position.x * rectSize, map.position.y * rectSize,
+              rectSize, rectSize),
+          Paint()..color = Colors.green);
+      canvas.drawRect(
+          Rect.fromLTWH(map.target.x * rectSize, map.target.y * rectSize,
+              rectSize, rectSize),
+          Paint()..color = Colors.red);
     }
+
+    repaint = false;
   }
 
   @override
-  // Will also update on new json
-  bool shouldRepaint(MapCanvas oldDelegate) => cursor.x >= 0 && cursor.y >= 0;
+  bool shouldRepaint(MapCanvas oldDelegate) => repaint;
   @override
   bool shouldRebuildSemantics(MapCanvas oldDelegate) => false;
 }
