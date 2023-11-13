@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
@@ -12,9 +13,15 @@ abstract class AppBlocEvent {
 }
 
 @immutable
-class ChangeStateEvent extends AppBlocEvent {
-  final int value;
-  const ChangeStateEvent(this.value);
+class ChangeJsonEvent extends AppBlocEvent {
+  final String value;
+  const ChangeJsonEvent(this.value);
+}
+
+@immutable
+class ChangeCursorEvent extends AppBlocEvent {
+  final Point point;
+  const ChangeCursorEvent(this.point);
 }
 
 // State
@@ -22,27 +29,32 @@ class ChangeStateEvent extends AppBlocEvent {
 @immutable
 class AppState extends Equatable {
   final int index;
-  final int value;
+  final String json;
+  final Point cursor;
 
   const AppState.empty()
       : index = 0,
-        value = 0;
+        json = "",
+        cursor = const Point(-1, -1);
 
   const AppState({
     required this.index,
-    required this.value,
+    required this.json,
+    required this.cursor,
   });
 
   @override
-  List<Object?> get props => [index, value];
+  List<Object?> get props => [index, json, cursor];
 
   AppState copyWith({
     int? index,
-    int? value,
+    String? json,
+    Point? cursor,
   }) {
     return AppState(
       index: index ?? this.index,
-      value: value ?? this.value,
+      json: json ?? this.json,
+      cursor: cursor ?? this.cursor,
     );
   }
 }
@@ -51,11 +63,17 @@ class AppState extends Equatable {
 
 class AppBloc extends Bloc<AppBlocEvent, AppState> {
   AppBloc() : super(const AppState.empty()) {
-    on<ChangeStateEvent>(_onChangeStateEvent);
+    on<ChangeJsonEvent>(_onChangeJsonEvent);
+    on<ChangeCursorEvent>(_onChangeCursorEvent);
   }
 
-  FutureOr<void> _onChangeStateEvent(
-      ChangeStateEvent event, Emitter<AppState> emit) async {
-    emit(state.copyWith(index: state.index + 1, value: event.value));
+  FutureOr<void> _onChangeJsonEvent(
+      ChangeJsonEvent event, Emitter<AppState> emit) async {
+    emit(state.copyWith(index: state.index + 1, json: event.value));
+  }
+
+  FutureOr<void> _onChangeCursorEvent(
+      ChangeCursorEvent event, Emitter<AppState> emit) async {
+    emit(state.copyWith(cursor: event.point));
   }
 }

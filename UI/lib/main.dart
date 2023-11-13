@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_sys_template/app_bloc.dart';
 import 'package:flutter_sys_template/pages/alpha.dart';
-import 'package:flutter_sys_template/pages/beta.dart';
-import 'package:flutter_sys_template/pages/charlie.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_sys_template/pages/map_solver.dart';
+import 'package:flutter_sys_template/pages/one.dart';
 import 'package:flutter_sys_template/native_json.dart';
 
 void main() => runApp(const SysApp());
@@ -20,15 +19,6 @@ class SysApp extends StatelessWidget {
           seedColor: Colors.purple,
           brightness: Brightness.dark,
         ),
-        textTheme: TextTheme(
-          displayLarge: const TextStyle(
-            fontSize: 72,
-            fontWeight: FontWeight.bold,
-          ),
-          titleLarge: GoogleFonts.oswald(
-            fontSize: 30,
-          ),
-        ),
       ),
       home: BlocProvider(
         create: (context) => AppBloc(),
@@ -41,15 +31,15 @@ class SysApp extends StatelessWidget {
 
 const List<Tab> tabs = <Tab>[
   Tab(
+    text: 'Map Solver',
+    icon: Icon(Icons.map),
+  ),
+  Tab(
     text: 'Alpha',
     icon: Icon(Icons.settings_accessibility_rounded),
   ),
   Tab(
-    text: 'Beta',
-    icon: Icon(Icons.roundabout_left_rounded),
-  ),
-  Tab(
-    text: 'Charlie',
+    text: 'One',
     icon: Icon(Icons.hive_rounded),
   ),
 ];
@@ -70,63 +60,41 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AppBloc, AppState>(
-      listener: (context, state) {
-        print(state);
-      },
-      builder: (context, state) {
-        return DefaultTabController(
-          length: tabs.length,
-          child: Builder(builder: (BuildContext context) {
-            final TabController tabController =
-                DefaultTabController.of(context);
-            tabController.addListener(() {
-              if (!tabController.indexIsChanging) {
-                // Your code goes here.
-                // To get index of current tab use tabController.index
-              }
-            });
-            return Scaffold(
-              appBar: AppBar(
-                title: const Text('Systems App'),
-                leading: IconButton(
-                  onPressed: () {
-                    foo(123);
-                  },
-                  icon: const Icon(Icons.bluetooth_disabled),
-                ),
-                actions: [
-                  IconButton(
-                    onPressed: () {
-                      print("HELLO!");
-                    },
-                    icon: const Icon(Icons.question_answer_rounded),
-                  ),
-                ],
-                bottom: TabBar(
-                  labelColor: Colors.black,
-                  unselectedLabelColor: Colors.white,
-                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  indicator: BoxDecoration(
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10)),
-                      color: Theme.of(context).indicatorColor),
-                  tabs: tabs,
-                ),
-              ),
-              body: TabBarView(
-                children: [
-                  alphaWidget(state),
-                  betaWidget(),
-                  charlieWidget(),
-                ],
-              ),
-              bottomSheet: Text(validJSON() ? 'FFI OK' : 'FFI FAIL'),
-            );
-          }),
+    return DefaultTabController(
+      length: tabs.length,
+      child: Builder(builder: (BuildContext context) {
+        final TabController tabController = DefaultTabController.of(context);
+        tabController.addListener(() {
+          if (!tabController.indexIsChanging) {
+            // Your code goes here.
+            // To get index of current tab use tabController.index
+          }
+        });
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Systems App'),
+            bottom: TabBar(
+              labelColor: Colors.black,
+              unselectedLabelColor: Colors.white,
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+              indicator: BoxDecoration(
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10)),
+                  color: Theme.of(context).indicatorColor),
+              tabs: tabs,
+            ),
+          ),
+          body: TabBarView(
+            children: [
+              mapSolver(),
+              alpha(),
+              one(),
+            ],
+          ),
+          bottomSheet: Text(validJSON() ? 'FFI OK' : 'FFI FAIL'),
         );
-      },
+      }),
     );
   }
 }

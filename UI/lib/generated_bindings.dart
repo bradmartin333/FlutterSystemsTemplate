@@ -30,20 +30,24 @@ class NativeJSON {
   late final _hello_json =
       _hello_jsonPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
-  int foo(
-    int i,
+  int makeMap(
+    ffi.Pointer<ffi.Char> str,
+    int length,
     int port,
   ) {
-    return _foo(
-      i,
+    return _makeMap(
+      str,
+      length,
       port,
     );
   }
 
-  late final _fooPtr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function(ffi.Int32, ffi.Int64)>>(
-          'foo');
-  late final _foo = _fooPtr.asFunction<int Function(int, int)>();
+  late final _makeMapPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int32 Function(
+              ffi.Pointer<ffi.Char>, ffi.Int, ffi.Int64)>>('makeMap');
+  late final _makeMap =
+      _makeMapPtr.asFunction<int Function(ffi.Pointer<ffi.Char>, int, int)>();
 
   void __va_start(
     ffi.Pointer<va_list> arg0,
