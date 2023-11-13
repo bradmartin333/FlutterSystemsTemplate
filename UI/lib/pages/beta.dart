@@ -1,8 +1,9 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_sys_template/app_bloc.dart';
+
+List<Point<double>> points = [];
 
 void gestureEvent(BuildContext context, dynamic gesture) {
   Point p = Point(gesture.localPosition.dx, gesture.localPosition.dy);
@@ -17,35 +18,39 @@ Widget betaWidget(BuildContext context) {
       },
       builder: (context, state) {
         return CustomPaint(
-          painter: Sky(state.cursor),
+          painter: MapCanvas(state.cursor),
         );
       },
     ),
     onTapDown: (details) => gestureEvent(context, details),
-    onPanStart: (details) => gestureEvent(context, details),
+    onPanUpdate: (details) => gestureEvent(context, details),
   );
 }
 
-class Sky extends CustomPainter {
+class MapCanvas extends CustomPainter {
   Point cursor;
-
-  Sky(this.cursor);
+  MapCanvas(this.cursor);
 
   @override
   void paint(Canvas canvas, Size size) {
     final Rect rect = Offset.zero & size;
-    const RadialGradient gradient = RadialGradient(
-      center: Alignment(0.7, -0.6),
-      radius: 0.2,
-      colors: <Color>[Color(0xFFFFFF00), Color(0xFF0099FF)],
-      stops: <double>[0.4, 1.0],
-    );
     canvas.drawRect(
       rect,
-      Paint()..shader = gradient.createShader(rect),
+      Paint()..color = Colors.white,
     );
-    canvas.drawCircle(Offset(cursor.x as double, cursor.y as double), 5,
-        Paint()..color = Colors.black);
+
+    // Pixelate the points
+    double rectSize = 25;
+    double px = (cursor.x / rectSize).floor() * rectSize;
+    double py = (cursor.y / rectSize).floor() * rectSize;
+    Point<double> newPoint = Point(px, py);
+    if (!points.contains(newPoint)) {
+      points.add(newPoint);
+    }
+    for (var element in points) {
+      canvas.drawRect(Rect.fromLTWH(element.x, element.y, rectSize, rectSize),
+          Paint()..color = Colors.black);
+    }
   }
 
   // Since this Sky painter has no fields, it always paints
@@ -54,7 +59,7 @@ class Sky extends CustomPainter {
   // from the constructor) then we would return true if any
   // of them differed from the same fields on the oldDelegate.
   @override
-  bool shouldRepaint(Sky oldDelegate) => cursor.x >= 0 && cursor.y >= 0;
+  bool shouldRepaint(MapCanvas oldDelegate) => cursor.x >= 0 && cursor.y >= 0;
   @override
-  bool shouldRebuildSemantics(Sky oldDelegate) => false;
+  bool shouldRebuildSemantics(MapCanvas oldDelegate) => false;
 }
