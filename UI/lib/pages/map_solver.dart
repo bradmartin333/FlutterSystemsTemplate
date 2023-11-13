@@ -26,25 +26,23 @@ void gestureEvent(BuildContext context, dynamic gesture) {
       p.y < mapSize.y * rectSize) {
     switch (tool) {
       case DrawingTool.position:
-        if (points.contains(p)) {
-          points.remove(p);
-        }
-        Point newPosition =
-            Point((p.x / rectSize).floor(), (p.y / rectSize).floor());
-        if (position != newPosition) {
-          position = newPosition;
-          updateMap();
+        if (!points.contains(p)) {
+          Point newPosition =
+              Point((p.x / rectSize).floor(), (p.y / rectSize).floor());
+          if (position != newPosition) {
+            position = newPosition;
+            updateMap();
+          }
         }
         break;
       case DrawingTool.target:
-        if (points.contains(p)) {
-          points.remove(p);
-        }
-        Point newTarget =
-            Point((p.x / rectSize).floor(), (p.y / rectSize).floor());
-        if (target != newTarget) {
-          target = newTarget;
-          updateMap();
+        if (!points.contains(p)) {
+          Point newTarget =
+              Point((p.x / rectSize).floor(), (p.y / rectSize).floor());
+          if (target != newTarget) {
+            target = newTarget;
+            updateMap();
+          }
         }
         break;
       case DrawingTool.draw:
