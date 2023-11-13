@@ -2,13 +2,24 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_sys_template/app_bloc.dart';
+import 'package:flutter_sys_template/native_json.dart';
 
-Point mapSize = Point(-1, -1);
+double rectSize = 25;
+Point mapSize = const Point(-1, -1);
 List<Point<double>> points = [];
 
 void gestureEvent(BuildContext context, dynamic gesture) {
   Point p = Point(gesture.localPosition.dx, gesture.localPosition.dy);
   context.read<AppBloc>().add(ChangeCursorEvent(p));
+
+  sendMap(
+      mapSize,
+      String.fromCharCodes(Iterable.generate(
+          (mapSize.x * mapSize.y).toInt(),
+          (i) => points.contains(Point((i % mapSize.x + 1) * rectSize,
+                  (i / mapSize.x + 1).floor() * rectSize))
+              ? 120
+              : 32)));
 }
 
 Widget betaWidget(BuildContext context) {
@@ -19,7 +30,7 @@ Widget betaWidget(BuildContext context) {
       },
       builder: (context, state) {
         return CustomPaint(
-          painter: MapCanvas(state.cursor),
+          painter: MapCanvas(state.cursor, state.json),
         );
       },
     ),
@@ -30,18 +41,23 @@ Widget betaWidget(BuildContext context) {
 
 class MapCanvas extends CustomPainter {
   Point cursor;
-  MapCanvas(this.cursor);
+  String json;
+  MapCanvas(this.cursor, this.json);
 
   @override
   void paint(Canvas canvas, Size size) {
+    if (mapSize == const Point(-1, -1)) {
+      mapSize = Point(
+          (size.width / rectSize).floor(), (size.height / rectSize).floor());
+    }
+
     final Rect rect = Offset.zero & size;
     canvas.drawRect(
       rect,
       Paint()..color = Colors.white,
     );
 
-    // Pixelate the points
-    double rectSize = 25;
+    // Draw the user point
     double px = (cursor.x / rectSize).floor() * rectSize;
     double py = (cursor.y / rectSize).floor() * rectSize;
     Point<double> newPoint = Point(px, py);
@@ -52,13 +68,19 @@ class MapCanvas extends CustomPainter {
       canvas.drawRect(Rect.fromLTWH(element.x, element.y, rectSize, rectSize),
           Paint()..color = Colors.black);
     }
+
+    // Parse the map json
+    PathMap test = stringToPathMap(json);
+    if (test.valid && test.solved) {
+      for (var element in test.path) {
+        canvas.drawRect(
+            Rect.fromLTWH(
+                element.x * rectSize, element.y * rectSize, rectSize, rectSize),
+            Paint()..color = Colors.blue);
+      }
+    }
   }
 
-  // Since this Sky painter has no fields, it always paints
-  // the same thing and semantics information is the same.
-  // Therefore we return false here. If we had fields (set
-  // from the constructor) then we would return true if any
-  // of them differed from the same fields on the oldDelegate.
   @override
   bool shouldRepaint(MapCanvas oldDelegate) => cursor.x >= 0 && cursor.y >= 0;
   @override

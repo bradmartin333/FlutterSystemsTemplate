@@ -70,68 +70,42 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AppBloc, AppState>(
-      listener: (context, state) {
-        PathMap test = stringToPathMap(state.json);
-        if (test.valid) {
-          for (var element in test.path) {
-            print(element);
+    return DefaultTabController(
+      length: tabs.length,
+      child: Builder(builder: (BuildContext context) {
+        final TabController tabController =
+            DefaultTabController.of(context);
+        tabController.addListener(() {
+          if (!tabController.indexIsChanging) {
+            // Your code goes here.
+            // To get index of current tab use tabController.index
           }
-        }
-      },
-      builder: (context, state) {
-        return DefaultTabController(
-          length: tabs.length,
-          child: Builder(builder: (BuildContext context) {
-            final TabController tabController =
-                DefaultTabController.of(context);
-            tabController.addListener(() {
-              if (!tabController.indexIsChanging) {
-                // Your code goes here.
-                // To get index of current tab use tabController.index
-              }
-            });
-            return Scaffold(
-              appBar: AppBar(
-                title: const Text('Systems App'),
-                leading: IconButton(
-                  onPressed: () {
-                    foo(123);
-                  },
-                  icon: const Icon(Icons.bluetooth_disabled),
-                ),
-                actions: [
-                  IconButton(
-                    onPressed: () {
-                      print("HELLO!");
-                    },
-                    icon: const Icon(Icons.question_answer_rounded),
-                  ),
-                ],
-                bottom: TabBar(
-                  labelColor: Colors.black,
-                  unselectedLabelColor: Colors.white,
-                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  indicator: BoxDecoration(
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10)),
-                      color: Theme.of(context).indicatorColor),
-                  tabs: tabs,
-                ),
-              ),
-              body: TabBarView(
-                children: [
-                  alphaWidget(state),
-                  betaWidget(context),
-                  charlieWidget(),
-                ],
-              ),
-              bottomSheet: Text(validJSON() ? 'FFI OK' : 'FFI FAIL'),
-            );
-          }),
+        });
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Systems App'),
+            bottom: TabBar(
+              labelColor: Colors.black,
+              unselectedLabelColor: Colors.white,
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+              indicator: BoxDecoration(
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10)),
+                  color: Theme.of(context).indicatorColor),
+              tabs: tabs,
+            ),
+          ),
+          body: TabBarView(
+            children: [
+              alphaWidget(),
+              betaWidget(context),
+              charlieWidget(),
+            ],
+          ),
+          bottomSheet: Text(validJSON() ? 'FFI OK' : 'FFI FAIL'),
         );
-      },
+      }),
     );
   }
 }

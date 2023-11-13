@@ -42,11 +42,12 @@ class PathMap {
 }
 
 PathMap stringToPathMap(String s) {
+  Point np = const Point(-1, -1); // Null point
+
   Map<String, dynamic> json;
   try {
     json = jsonDecode(s);
   } catch (e) {
-    Point np = const Point(-1, -1); // Null point
     return PathMap(false, false, np, np, np, "", []);
   }
 
@@ -56,10 +57,12 @@ PathMap stringToPathMap(String s) {
   Point mapSize = Point(json['map']['x'] as int, json['map']['y'] as int);
   String mapString = json['map']['str'];
 
-  var points = json['path'];
   List<Point> path = [];
-  for (var point in points) {
-    path.add(Point(point['x'] as int, point['y'] as int));
+  var points = json['path'];
+  if (points != null) {
+    for (var point in points) {
+      path.add(Point(point['x'] as int, point['y'] as int));
+    }
   }
 
   return PathMap(true, solved, pos, target, mapSize, mapString, path);
@@ -101,23 +104,17 @@ String helloJSON() {
   return _bindings.hello_json().cast<Utf8>().toDartString();
 }
 
-void foo(int i) {
+void sendMap(
+  Point mapSize,
+  String mapString,
+) {
   PathMap pathmap = PathMap(
     true,
     false,
     const Point(0, 0),
     const Point(20, 8),
-    const Point(30, 10),
-    "     x      x                x"
-    "     x      xxxxxx    x      x"
-    "xxxx xxxxxxxx      xxxxxxx    "
-    "   x                     xxx x"
-    "        xxxxxx  xxxxx         "
-    "xxxx x  x    x            x   "
-    "   x x  xxxxxx    xxxxxx  xxxx"
-    "   x x            x    x      "
-    "   x xxxxxxxxx  xxx    xxxx   "
-    "xxxx                   x     x",
+    mapSize,
+    mapString,
     [],
   );
   String pathJsonString = jsonEncode(pathmap.toJson());
