@@ -8,8 +8,9 @@ const double buttonPadding = 3;
 
 bool repaint = false;
 DrawingTool tool = DrawingTool.none;
-double rectSize = 25;
+double rectSize = 20;
 Point mapSize = const Point(-1, -1);
+Offset mapInset = Offset.zero;
 Point position = const Point(0, 0);
 Point target = const Point(10, 10);
 List<Point<double>> points = []; // Raw local positions of user gestures
@@ -18,8 +19,8 @@ enum DrawingTool { none, position, target, draw, erase }
 
 void gestureEvent(BuildContext context, dynamic gesture) {
   Point<double> p = Point(
-      (gesture.localPosition.dx / rectSize).floor() * rectSize,
-      (gesture.localPosition.dy / rectSize).floor() * rectSize);
+      ((gesture.localPosition.dx - mapInset.dx) / rectSize).floor() * rectSize,
+      ((gesture.localPosition.dy - mapInset.dy) / rectSize).floor() * rectSize);
   if (p.x >= 0 &&
       p.y >= 0 &&
       p.x < mapSize.x * rectSize &&
@@ -115,7 +116,7 @@ Widget mapSolver() {
             onPanUpdate: (details) => gestureEvent(context, details),
           ),
         ),
-        bottomSheet: AnimatedSwitcher(
+        bottomNavigationBar: AnimatedSwitcher(
           duration: const Duration(milliseconds: 200),
           switchInCurve: Curves.bounceIn,
           transitionBuilder: (Widget child, Animation<double> animation) {
@@ -203,26 +204,36 @@ class MapCanvas extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     if (mapSize == const Point(-1, -1)) {
-      mapSize = Point((size.width / rectSize).floor(),
-          (size.height / rectSize).floor() - 2);
+      mapSize = Point(
+          (size.width / rectSize).floor(), (size.height / rectSize).floor());
       updateMap();
     }
 
-    // Draw infinite walls outside the starting map
     double bottom = mapSize.y * rectSize;
     double right = mapSize.x * rectSize;
+    mapInset = Offset((size.width - right) / 2.0, (size.height - bottom) / 2.0);
     canvas.drawRect(
-      Offset(0, bottom) & Size(size.width, size.height - bottom),
+      Offset.zero & Size(mapInset.dx, size.height * 2),
       Paint()..color = Colors.white,
     );
     canvas.drawRect(
-      Offset(right, 0) & Size(size.width - right, size.height),
+      Offset.zero & Size(size.width * 2, mapInset.dy),
+      Paint()..color = Colors.white,
+    );
+    canvas.drawRect(
+      Offset(0, bottom + mapInset.dy) & Size(size.width * 2, size.height * 2),
+      Paint()..color = Colors.white,
+    );
+    canvas.drawRect(
+      Offset(right + mapInset.dx, 0) & Size(size.width * 2, size.height * 2),
       Paint()..color = Colors.white,
     );
 
     // Draw the map we are storing here
     for (var point in points) {
-      canvas.drawRect(Rect.fromLTWH(point.x, point.y, rectSize, rectSize),
+      canvas.drawRect(
+          Rect.fromLTWH(
+              point.x + mapInset.dx, point.y + mapInset.dy, rectSize, rectSize),
           Paint()..color = Colors.white);
     }
 
@@ -232,18 +243,18 @@ class MapCanvas extends CustomPainter {
       if (map.solved) {
         for (var point in map.path) {
           canvas.drawRect(
-              Rect.fromLTWH(
-                  point.x * rectSize, point.y * rectSize, rectSize, rectSize),
+              Rect.fromLTWH(point.x * rectSize + mapInset.dx,
+                  point.y * rectSize + mapInset.dy, rectSize, rectSize),
               Paint()..color = Colors.blue);
         }
       }
       canvas.drawRect(
-          Rect.fromLTWH(map.position.x * rectSize, map.position.y * rectSize,
-              rectSize, rectSize),
+          Rect.fromLTWH(map.position.x * rectSize + mapInset.dx,
+              map.position.y * rectSize + mapInset.dy, rectSize, rectSize),
           Paint()..color = Colors.green);
       canvas.drawRect(
-          Rect.fromLTWH(map.target.x * rectSize, map.target.y * rectSize,
-              rectSize, rectSize),
+          Rect.fromLTWH(map.target.x * rectSize + mapInset.dx,
+              map.target.y * rectSize + mapInset.dy, rectSize, rectSize),
           Paint()..color = Colors.red);
     }
 
