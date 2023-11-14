@@ -214,19 +214,19 @@ class MapCanvas extends CustomPainter {
     mapInset = Offset((size.width - right) / 2.0, (size.height - bottom) / 2.0);
     canvas.drawRect(
       Offset.zero & Size(mapInset.dx, size.height * 2),
-      Paint()..color = Colors.white,
+      Paint()..color = Colors.black,
     );
     canvas.drawRect(
       Offset.zero & Size(size.width * 2, mapInset.dy),
-      Paint()..color = Colors.white,
+      Paint()..color = Colors.black,
     );
     canvas.drawRect(
       Offset(0, bottom + mapInset.dy) & Size(size.width * 2, size.height * 2),
-      Paint()..color = Colors.white,
+      Paint()..color = Colors.black,
     );
     canvas.drawRect(
       Offset(right + mapInset.dx, 0) & Size(size.width * 2, size.height * 2),
-      Paint()..color = Colors.white,
+      Paint()..color = Colors.black,
     );
 
     // Draw the map we are storing here
@@ -234,7 +234,7 @@ class MapCanvas extends CustomPainter {
       canvas.drawRect(
           Rect.fromLTWH(
               point.x + mapInset.dx, point.y + mapInset.dy, rectSize, rectSize),
-          Paint()..color = Colors.white);
+          Paint()..color = Colors.black);
     }
 
     // Parse the map json
