@@ -76,8 +76,12 @@ final DynamicLibrary dylib = () {
   if (Platform.isMacOS || Platform.isIOS) {
     throw UnsupportedError('Usupported platform: ${Platform.operatingSystem}');
   }
-  if (Platform.isAndroid || Platform.isLinux) {
+  if (Platform.isAndroid) {
     return DynamicLibrary.open('libjson.so');
+  }
+  if (Platform.isLinux) {
+    return DynamicLibrary.open(p.join(
+        Directory.current.parent.path, 'json_library', 'bin', 'libjson.so'));
   }
   if (Platform.isWindows) {
     return DynamicLibrary.open(p.join(Directory.current.parent.path,

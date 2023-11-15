@@ -10,7 +10,7 @@ cmake ../
 msbuild .\json_library.vcxproj
 msbuild .\json_library_test.vcxproj
 
-REM Run the test .exe and verify output
+REM Run the test .exe and capture output
 cd /D "../bin/Debug"
 .\json_library_test.exe > test_output.txt
 
