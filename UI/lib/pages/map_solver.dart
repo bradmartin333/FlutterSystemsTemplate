@@ -213,7 +213,9 @@ class MapCanvas extends CustomPainter {
       if (!map.valid) {
         updateMap();
       } else {
-        // Load map string into local raw points
+        // Load map into local variables
+        position = map.position;
+        target = map.target;
         Characters c = map.mapString.characters;
         for (var i = 0; i < c.length; i++) {
           if (c.elementAt(i) == 'x') {
