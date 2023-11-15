@@ -4,6 +4,7 @@ import 'package:flutter_sys_template/app_model.dart';
 import 'package:flutter_sys_template/native_json.dart';
 import 'package:provider/provider.dart';
 
+bool repaint = true;
 const double buttonPadding = 3;
 
 DrawingTool tool = DrawingTool.none;
@@ -76,6 +77,9 @@ void updateMap() {
                   (i / mapSize.x).floor() * rectSize))
               ? 120
               : 32)));
+
+  repaint = true;
+  print("SEND");
 }
 
 Widget makeToolButton(
@@ -253,10 +257,13 @@ class MapCanvas extends CustomPainter {
               map.target.y * rectSize + mapInset.dy, rectSize, rectSize),
           Paint()..color = Colors.red);
     }
+
+    repaint = false;
+    print("DRAW");
   }
 
   @override
-  bool shouldRepaint(MapCanvas oldDelegate) => true;
+  bool shouldRepaint(MapCanvas oldDelegate) => repaint;
   @override
   bool shouldRebuildSemantics(MapCanvas oldDelegate) => false;
 }
