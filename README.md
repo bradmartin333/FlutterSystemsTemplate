@@ -15,6 +15,7 @@
 ## TODO
 
 - [ ] More sample UI stuff
+- [ ] Automated Linux release
 - [ ] Go through all steps on new machine to validate!!!
 
 ### Making the UI
