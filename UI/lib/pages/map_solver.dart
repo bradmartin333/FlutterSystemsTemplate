@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 const double buttonPadding = 3;
 
-DrawingTool tool = DrawingTool.none;
+DrawingTool tool = DrawingTool.draw;
 double rectSize = 20;
 Point mapSize = const Point(-1, -1);
 Offset mapInset = Offset.zero;
