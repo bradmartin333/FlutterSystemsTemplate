@@ -8,7 +8,7 @@ bool repaint = true;
 const double buttonPadding = 3;
 
 DrawingTool tool = DrawingTool.none;
-double rectSize = 10;
+double rectSize = 20;
 Point mapSize = const Point(-1, -1);
 Offset mapInset = Offset.zero;
 Point position = const Point(0, 0);
@@ -77,9 +77,7 @@ void updateMap() {
                   (i / mapSize.x).floor() * rectSize))
               ? 120
               : 32)));
-
   repaint = true;
-  print("SEND");
 }
 
 Widget makeToolButton(
@@ -259,7 +257,6 @@ class MapCanvas extends CustomPainter {
     }
 
     repaint = false;
-    print("DRAW");
   }
 
   @override
