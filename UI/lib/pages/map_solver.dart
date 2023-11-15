@@ -205,13 +205,23 @@ class MapCanvas extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    firstDraw = false;
+    PathMap map = stringToPathMap(appModel.json);
 
     if (mapSize == const Point(-1, -1)) {
-      firstDraw = true;
       mapSize = Point(
           (size.width / rectSize).floor(), (size.height / rectSize).floor());
-      updateMap();
+      if (!map.valid) {
+        updateMap();
+      } else {
+        // Load map string into local raw points
+        Characters c = map.mapString.characters;
+        for (var i = 0; i < c.length; i++) {
+          if (c.elementAt(i) == 'x') {
+            points.add(Point((i % mapSize.x) * rectSize,
+                (i / mapSize.x).floor() * rectSize));
+          }
+        }
+      }
     }
 
     double bottom = mapSize.y * rectSize;
@@ -243,7 +253,6 @@ class MapCanvas extends CustomPainter {
     }
 
     // Parse the map json
-    PathMap map = stringToPathMap(appModel.json);
     if (map.valid) {
       if (map.solved) {
         for (var point in map.path) {

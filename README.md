@@ -8,6 +8,7 @@
 - A* Path Generation
 - JSON Compatible
 - Android and Windows (More possible) support
+- Key-value data persistence
 
 ## TODO
 - [ ] More sample UI stuff

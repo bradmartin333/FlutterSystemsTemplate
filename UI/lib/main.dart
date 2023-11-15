@@ -6,6 +6,7 @@ import 'package:flutter_sys_template/pages/map_solver.dart';
 import 'package:flutter_sys_template/pages/one.dart';
 import 'package:flutter_sys_template/native_json.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   //debugRepaintRainbowEnabled = true;
@@ -59,7 +60,16 @@ class _HomePageState extends State<HomePage> {
   @override
   initState() {
     super.initState();
+    _loadMap();
     initPortListener(context);
+  }
+
+  Future<void> _loadMap() async {
+    final prefs = await SharedPreferences.getInstance();
+    String json = prefs.getString('mapJson') ?? "";
+    setState(() {
+      Provider.of<AppModel>(context, listen: false).updateJson(json);
+    });
   }
 
   @override
