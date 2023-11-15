@@ -1,5 +1,4 @@
 $currentDir = Get-Location
-$currentDirName = (Get-Item $currentDir).FullName
 $buildDir = (Get-Item $currentDir).Parent.FullName
 $rootDir = (Get-Item $currentDir).Parent.Parent.FullName
 
