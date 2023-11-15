@@ -5,10 +5,10 @@ import 'dart:isolate';
 import 'dart:math';
 import 'package:ffi/ffi.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_sys_template/app_bloc.dart';
+import 'package:flutter_sys_template/app_model.dart';
 import 'package:flutter_sys_template/generated_bindings.dart';
 import 'package:path/path.dart' as p;
+import 'package:provider/provider.dart';
 
 enum FFIState { none, sent, waiting, ok, fail }
 
@@ -96,7 +96,7 @@ void initPortListener(BuildContext context) {
 
   port.listen((data) {
     ffiState = FFIState.ok;
-    context.read<AppBloc>().add(ChangeJsonEvent(data));
+    Provider.of<AppModel>(context, listen: false).updateJson(data);
   });
 }
 

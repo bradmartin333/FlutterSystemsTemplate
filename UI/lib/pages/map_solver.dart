@@ -1,12 +1,11 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_sys_template/app_bloc.dart';
+import 'package:flutter_sys_template/app_model.dart';
 import 'package:flutter_sys_template/native_json.dart';
+import 'package:provider/provider.dart';
 
 const double buttonPadding = 3;
 
-bool repaint = false;
 DrawingTool tool = DrawingTool.none;
 double rectSize = 20;
 Point mapSize = const Point(-1, -1);
@@ -21,6 +20,7 @@ void gestureEvent(BuildContext context, dynamic gesture) {
   Point<double> p = Point(
       ((gesture.localPosition.dx - mapInset.dx) / rectSize).floor() * rectSize,
       ((gesture.localPosition.dy - mapInset.dy) / rectSize).floor() * rectSize);
+
   if (p.x >= 0 &&
       p.y >= 0 &&
       p.x < mapSize.x * rectSize &&
@@ -102,13 +102,10 @@ Widget mapSolver() {
           width: double.infinity,
           height: double.infinity,
           child: GestureDetector(
-            child: BlocConsumer<AppBloc, AppState>(
-              listener: (context, state) {
-                repaint = true;
-              },
-              builder: (context, state) {
+            child: Consumer<AppModel>(
+              builder: (context, appModel, child) {
                 return CustomPaint(
-                  painter: MapCanvas(state.cursor, state.json),
+                  painter: MapCanvas(appModel),
                 );
               },
             ),
@@ -116,80 +113,83 @@ Widget mapSolver() {
             onPanUpdate: (details) => gestureEvent(context, details),
           ),
         ),
-        bottomNavigationBar: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 200),
-          switchInCurve: Curves.bounceIn,
-          transitionBuilder: (Widget child, Animation<double> animation) {
-            final offsetAnimation = Tween(
-              begin: const Offset(1.0, 0.0),
-              end: const Offset(0.0, 0.0),
-            ).animate(animation);
-            return ClipRect(
-              child: SlideTransition(
-                position: offsetAnimation,
-                child: child,
-              ),
-            );
-          },
-          child: userDelete
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  key: const ValueKey<int>(0),
-                  children: [
-                    const Text('Delete all walls?'),
-                    Padding(
-                      padding: const EdgeInsets.all(buttonPadding),
-                      child: FilledButton.tonal(
-                        onPressed: () {
-                          points.clear();
-                          updateMap();
-                          setState(() => userDelete = false);
-                        },
-                        child: const Icon(
-                          Icons.check_circle,
-                          color: Colors.green,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(buttonPadding),
-                      child: FilledButton.tonal(
-                        onPressed: () => setState(() => userDelete = false),
-                        child: const Icon(
-                          Icons.cancel,
-                          color: Colors.red,
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  key: const ValueKey<int>(1),
-                  children: [
-                    makeToolButton(
-                        DrawingTool.position, Icons.my_location, setState),
-                    makeToolButton(DrawingTool.target, Icons.flag, setState),
-                    makeToolButton(
-                        DrawingTool.draw, Icons.select_all, setState),
-                    makeToolButton(DrawingTool.erase, Icons.deselect, setState),
-                    Padding(
-                      padding: const EdgeInsets.all(buttonPadding),
-                      child: Visibility(
-                        visible: !userDelete,
+        bottomNavigationBar: RepaintBoundary(
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 200),
+            switchInCurve: Curves.bounceIn,
+            transitionBuilder: (Widget child, Animation<double> animation) {
+              final offsetAnimation = Tween(
+                begin: const Offset(1.0, 0.0),
+                end: const Offset(0.0, 0.0),
+              ).animate(animation);
+              return ClipRect(
+                child: SlideTransition(
+                  position: offsetAnimation,
+                  child: child,
+                ),
+              );
+            },
+            child: userDelete
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    key: const ValueKey<int>(0),
+                    children: [
+                      const Text('Delete all walls?'),
+                      Padding(
+                        padding: const EdgeInsets.all(buttonPadding),
                         child: FilledButton.tonal(
                           onPressed: () {
-                            setState(() {
-                              tool = DrawingTool.none;
-                              userDelete = true;
-                            });
+                            points.clear();
+                            updateMap();
+                            setState(() => userDelete = false);
                           },
-                          child: const Icon(Icons.delete_forever),
+                          child: const Icon(
+                            Icons.check_circle,
+                            color: Colors.green,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
+                      Padding(
+                        padding: const EdgeInsets.all(buttonPadding),
+                        child: FilledButton.tonal(
+                          onPressed: () => setState(() => userDelete = false),
+                          child: const Icon(
+                            Icons.cancel,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    key: const ValueKey<int>(1),
+                    children: [
+                      makeToolButton(
+                          DrawingTool.position, Icons.my_location, setState),
+                      makeToolButton(DrawingTool.target, Icons.flag, setState),
+                      makeToolButton(
+                          DrawingTool.draw, Icons.select_all, setState),
+                      makeToolButton(
+                          DrawingTool.erase, Icons.deselect, setState),
+                      Padding(
+                        padding: const EdgeInsets.all(buttonPadding),
+                        child: Visibility(
+                          visible: !userDelete,
+                          child: FilledButton.tonal(
+                            onPressed: () {
+                              setState(() {
+                                tool = DrawingTool.none;
+                                userDelete = true;
+                              });
+                            },
+                            child: const Icon(Icons.delete_forever),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+          ),
         ),
       );
     },
@@ -197,13 +197,18 @@ Widget mapSolver() {
 }
 
 class MapCanvas extends CustomPainter {
-  Point cursor;
-  String json;
-  MapCanvas(this.cursor, this.json);
+  var firstDraw = false;
+
+  AppModel appModel;
+
+  MapCanvas(this.appModel);
 
   @override
   void paint(Canvas canvas, Size size) {
+    firstDraw = false;
+
     if (mapSize == const Point(-1, -1)) {
+      firstDraw = true;
       mapSize = Point(
           (size.width / rectSize).floor(), (size.height / rectSize).floor());
       updateMap();
@@ -238,7 +243,7 @@ class MapCanvas extends CustomPainter {
     }
 
     // Parse the map json
-    PathMap map = stringToPathMap(json);
+    PathMap map = stringToPathMap(appModel.json);
     if (map.valid) {
       if (map.solved) {
         for (var point in map.path) {
@@ -257,12 +262,10 @@ class MapCanvas extends CustomPainter {
               map.target.y * rectSize + mapInset.dy, rectSize, rectSize),
           Paint()..color = Colors.red);
     }
-
-    repaint = false;
   }
 
   @override
-  bool shouldRepaint(MapCanvas oldDelegate) => repaint;
+  bool shouldRepaint(MapCanvas oldDelegate) => true;
   @override
   bool shouldRebuildSemantics(MapCanvas oldDelegate) => false;
 }
