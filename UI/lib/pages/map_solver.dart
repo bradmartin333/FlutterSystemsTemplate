@@ -1,14 +1,12 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_sys_template/app_bloc.dart';
 import 'package:flutter_sys_template/native_json.dart';
 
 const double buttonPadding = 3;
 
 bool repaint = false;
 DrawingTool tool = DrawingTool.none;
-double rectSize = 20;
+double rectSize = 10;
 Point mapSize = const Point(-1, -1);
 Offset mapInset = Offset.zero;
 Point position = const Point(0, 0);
@@ -102,15 +100,8 @@ Widget mapSolver() {
           width: double.infinity,
           height: double.infinity,
           child: GestureDetector(
-            child: BlocConsumer<AppBloc, AppState>(
-              listener: (context, state) {
-                repaint = true;
-              },
-              builder: (context, state) {
-                return CustomPaint(
-                  painter: MapCanvas(state.cursor, state.json),
-                );
-              },
+            child: CustomPaint(
+              painter: MapCanvas(const Point(0, 0), ""),
             ),
             onTapDown: (details) => gestureEvent(context, details),
             onPanUpdate: (details) => gestureEvent(context, details),

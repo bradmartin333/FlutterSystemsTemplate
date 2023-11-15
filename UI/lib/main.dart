@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_sys_template/app_bloc.dart';
 import 'package:flutter_sys_template/pages/alpha.dart';
 import 'package:flutter_sys_template/pages/map_solver.dart';
 import 'package:flutter_sys_template/pages/one.dart';
@@ -20,10 +18,7 @@ class SysApp extends StatelessWidget {
           brightness: Brightness.dark,
         ),
       ),
-      home: BlocProvider(
-        create: (context) => AppBloc(),
-        child: const HomePage(),
-      ),
+      home: const HomePage(),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -62,45 +57,44 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: tabs.length,
-      child: Builder(builder: (BuildContext context) {
-        final TabController tabController = DefaultTabController.of(context);
-        tabController.addListener(() {
-          if (!tabController.indexIsChanging) {
-            // Your code goes here.
-            // To get index of current tab use tabController.index
-          }
-        });
-        return BlocConsumer<AppBloc, AppState>(
-          listener: (context, state) {},
-          builder: (context, state) {
-            return Scaffold(
-              appBar: AppBar(
-                title: const Text('Systems App'),
-                bottom: TabBar(
-                  labelColor: Colors.black,
-                  unselectedLabelColor: Colors.white,
-                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  indicator: BoxDecoration(
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10)),
-                      color: Theme.of(context).indicatorColor),
-                  tabs: tabs,
-                ),
+      child: Builder(
+        builder: (BuildContext context) {
+          final TabController tabController = DefaultTabController.of(context);
+          tabController.addListener(
+            () {
+              if (!tabController.indexIsChanging) {
+                // Your code goes here.
+                // To get index of current tab use tabController.index
+              }
+            },
+          );
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Systems App'),
+              bottom: TabBar(
+                labelColor: Colors.black,
+                unselectedLabelColor: Colors.white,
+                padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                indicator: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10)),
+                    color: Theme.of(context).indicatorColor),
+                tabs: tabs,
               ),
-              body: TabBarView(
-                physics: const NeverScrollableScrollPhysics(),
-                children: [
-                  mapSolver(),
-                  alpha(),
-                  one(),
-                ],
-              ),
-              bottomSheet: Text(jsonStateString()),
-            );
-          },
-        );
-      }),
+            ),
+            body: TabBarView(
+              physics: const NeverScrollableScrollPhysics(),
+              children: [
+                mapSolver(),
+                alpha(),
+                one(),
+              ],
+            ),
+            bottomSheet: Text(jsonStateString()),
+          );
+        },
+      ),
     );
   }
 }
