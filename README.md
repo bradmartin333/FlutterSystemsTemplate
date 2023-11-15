@@ -1,14 +1,15 @@
 # The most detailed systems template
 
 ## Features and Examples
-- Dart to C++
-- C++ to Dart
-- State Management
-- Tab Controller
-- A* Path Generation
-- JSON Compatible
 - Android and Windows (More possible) support
-- Key-value data persistence
+- FFI
+    - Dart to C++
+    - C++ to Dart
+    - [JSON Compatible](https://github.com/nlohmann/json)
+- [State Management](https://docs.flutter.dev/data-and-backend/state-mgmt/simple)
+- [Tab Controller](https://api.flutter.dev/flutter/material/TabController-class.html)
+- [A* Path Generation](https://github.com/leethomason/MicroPather)
+- [Key-value data persistence](https://docs.flutter.dev/cookbook/persistence/key-value)
 
 ## TODO
 - [ ] More sample UI stuff
