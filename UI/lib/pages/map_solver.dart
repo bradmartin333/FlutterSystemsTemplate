@@ -1,10 +1,11 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_sys_template/app_model.dart';
 import 'package:flutter_sys_template/native_json.dart';
+import 'package:provider/provider.dart';
 
 const double buttonPadding = 3;
 
-bool repaint = false;
 DrawingTool tool = DrawingTool.none;
 double rectSize = 10;
 Point mapSize = const Point(-1, -1);
@@ -19,6 +20,7 @@ void gestureEvent(BuildContext context, dynamic gesture) {
   Point<double> p = Point(
       ((gesture.localPosition.dx - mapInset.dx) / rectSize).floor() * rectSize,
       ((gesture.localPosition.dy - mapInset.dy) / rectSize).floor() * rectSize);
+
   if (p.x >= 0 &&
       p.y >= 0 &&
       p.x < mapSize.x * rectSize &&
@@ -100,8 +102,12 @@ Widget mapSolver() {
           width: double.infinity,
           height: double.infinity,
           child: GestureDetector(
-            child: CustomPaint(
-              painter: MapCanvas(const Point(0, 0), ""),
+            child: Consumer<AppModel>(
+              builder: (context, appModel, child) {
+                return CustomPaint(
+                  painter: MapCanvas(appModel),
+                );
+              },
             ),
             onTapDown: (details) => gestureEvent(context, details),
             onPanUpdate: (details) => gestureEvent(context, details),
@@ -188,9 +194,8 @@ Widget mapSolver() {
 }
 
 class MapCanvas extends CustomPainter {
-  Point cursor;
-  String json;
-  MapCanvas(this.cursor, this.json);
+  AppModel appModel;
+  MapCanvas(this.appModel);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -229,7 +234,7 @@ class MapCanvas extends CustomPainter {
     }
 
     // Parse the map json
-    PathMap map = stringToPathMap(json);
+    PathMap map = stringToPathMap(appModel.json);
     if (map.valid) {
       if (map.solved) {
         for (var point in map.path) {
@@ -248,12 +253,10 @@ class MapCanvas extends CustomPainter {
               map.target.y * rectSize + mapInset.dy, rectSize, rectSize),
           Paint()..color = Colors.red);
     }
-
-    repaint = false;
   }
 
   @override
-  bool shouldRepaint(MapCanvas oldDelegate) => repaint;
+  bool shouldRepaint(MapCanvas oldDelegate) => true;
   @override
   bool shouldRebuildSemantics(MapCanvas oldDelegate) => false;
 }

@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_sys_template/app_model.dart';
 import 'package:flutter_sys_template/pages/alpha.dart';
 import 'package:flutter_sys_template/pages/map_solver.dart';
 import 'package:flutter_sys_template/pages/one.dart';
 import 'package:flutter_sys_template/native_json.dart';
+import 'package:provider/provider.dart';
 
-void main() => runApp(const SysApp());
+void main() => runApp(ChangeNotifierProvider(
+      create: (context) => AppModel(),
+      child: const SysApp(),
+    ));
 
 class SysApp extends StatelessWidget {
   const SysApp({super.key});
@@ -91,7 +96,10 @@ class _HomePageState extends State<HomePage> {
                 one(),
               ],
             ),
-            bottomSheet: Text(jsonStateString()),
+            bottomSheet:
+                Consumer<AppModel>(builder: (context, appModel, child) {
+              return Text(jsonStateString());
+            }),
           );
         },
       ),
