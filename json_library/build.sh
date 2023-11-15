@@ -25,5 +25,9 @@ else
   echo "TEXT EXE FAIL"
 fi
 
+# Regenerate the dart bindings
+cd "../../UI"
+dart run ffigen --config config.yaml
+
 # Change directory back to the original working directory
 cd ../json_library

@@ -16,7 +16,6 @@
 
 - [ ] More sample UI stuff
 - [ ] Go through all steps on new machine to validate!!!
-- [ ] Linux -> Android
 
 ### Making the UI
 
@@ -41,6 +40,7 @@
 - Implement the `ReceivePort` and required funtions in `UI\lib\native_json.dart` as per [this comment](https://github.com/flutter/flutter/issues/63255#issuecomment-671216406)
 - Add `../json_library/src/dart/dart_api_dl.h` to entry points in `UI\config.yaml`
 - Update `UI\android\app\CMakeLists.txt` in the same way
+
 
 ### ![windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
 
@@ -87,10 +87,14 @@ These steps assume that you have completed the windows specific steps above and 
     ```
 1. Create `UI\windows\CMakeLists.txt` based off the file in this repo
 
-### ![Ubuntu](https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)
+### ![ubuntu](https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)
 
-1. `sudo apt install cmake`
-1. TODO: Install `llvm` to fun `ffigen` and add to `.sh`
+Install the [manual way](https://docs.flutter.dev/get-started/install/linux#method-2-manual-installation), not using `snap`. Huge speed decrease with `snap`.
+
+1. `sudo apt install cmake clang lldb lld`
 1. `cd json_library/`
-1. `sudo chmod +x ./build.sh`
-1. `./build.sh` (Not `sudo`!)
+1. `./build.sh` (Not `sudo` or paths will be wrong!)
+
+### ![android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white) built from ![ubuntu](https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)
+
+Coming Soon!
