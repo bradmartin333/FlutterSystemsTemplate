@@ -1,2 +1,4 @@
 *library/bin
 *library/build
+*win_release/bin
+*win_release/json_library
