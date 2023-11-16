@@ -98,4 +98,5 @@ Install the [manual way](https://docs.flutter.dev/get-started/install/linux#meth
 
 ### ![android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white) built from ![ubuntu](https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)
 
-Coming Soon!
+- [Ubuntu Android Studio](https://github.com/mfonville/android-studio)
+- [Linux Android Studio](https://developer.android.com/studio/install#linux) (Haven't tried this method)
