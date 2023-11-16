@@ -66,6 +66,9 @@ android {
             path = file("CMakeLists.txt")
         }
     }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 flutter {

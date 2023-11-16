@@ -7,6 +7,9 @@ import 'package:flutter_sys_template/pages/one.dart';
 import 'package:flutter_sys_template/native_json.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:home_widget/home_widget.dart';
+
+const String androidWidgetName = 'TemplateWidget';
 
 void main() {
   //debugRepaintRainbowEnabled = true;
@@ -54,6 +57,13 @@ class HomePage extends StatefulWidget {
 
   @override
   State<HomePage> createState() => _HomePageState();
+}
+
+void updateHeadline(PathMap map) {
+  HomeWidget.saveWidgetData<String>('solved', map.solved ? '\u2705' : '\u274C');
+  HomeWidget.updateWidget(
+    androidName: androidWidgetName,
+  );
 }
 
 class _HomePageState extends State<HomePage> {
@@ -112,6 +122,7 @@ class _HomePageState extends State<HomePage> {
             ),
             bottomSheet:
                 Consumer<AppModel>(builder: (context, appModel, child) {
+              updateHeadline(stringToPathMap(appModel.json));
               return Text(jsonStateString());
             }),
           );
